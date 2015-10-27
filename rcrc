@@ -1,0 +1,2 @@
+EXCLUDES="README.md LICENSE Brewfile Caskfile osx bootstrap.sh"
+SYMLINK_DIRS="antigen"

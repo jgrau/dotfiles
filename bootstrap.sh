@@ -28,6 +28,9 @@ npm install -g n
 n latest
 npm install -g npm
 
+# Make sure rbenv is initiated
+eval "$(rbenv init -)"
+
 # Ruby
 DEFAULT_RUBY='2.2.3'
 rbenv install --skip-existing $DEFAULT_RUBY
@@ -44,3 +47,6 @@ gem install bundler git-up tmuxinator
 
 source 'projects'
 source 'osx'
+
+# Open a zsh session so antigen will install
+zsh

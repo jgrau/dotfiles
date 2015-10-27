@@ -65,7 +65,7 @@ setopt nonomatch
 ### Added by the Heroku Toolbelt
 # export PATH="/usr/local/heroku/bin:$PATH"
 export DEFAULT_USER=jgrau
-export EDITOR='mvim -v'
+export EDITOR='vim'
 export PURE_GIT_PULL=0
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 

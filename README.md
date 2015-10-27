@@ -25,3 +25,25 @@ sh ~/.dotfiles/bootstrap.sh
 * `sudo vim /etc/shells`
 * Add `/usr/local/bin/zsh`
 * `chsh -s /usr/local/bin/zsh`
+
+### Autolaunch launchbar
+
+* Open `Users & Groups preferences`
+* Add `LaunchBar`
+
+### Autolaunch slate
+
+* Open `Slate`
+* In the slate menu, click `Launch slate on login`
+
+### Launch dropbox
+
+So the files will start to sync
+
+### Set solarized iterm colors
+
+* `wget http://ethanschoonover.com/solarized/files/solarized.zip`
+* Unzip
+* Find `iterm-solarized`
+* Open `solarized-dark.iterm`
+

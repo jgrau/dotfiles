@@ -34,6 +34,10 @@ rbenv install --skip-existing $DEFAULT_RUBY
 rbenv global $DEFAULT_RUBY
 rbenv rehash
 
+# Postgres was installed by homebrew but we need to start it
+ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+
 # Now that we have a ruby we can install bundler
 # and other global gems
 gem install bundler git-up tmuxinator

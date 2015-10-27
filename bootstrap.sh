@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Go to the dir where the bootstrap script is located
+cd `dirname $0`
+
 # Ask for the administrator password upfront
 sudo -v
 
@@ -20,6 +23,11 @@ brew cleanup
 rcup -K rcrc
 rcup
 
+# Node
+npm install -g n
+n latest
+npm install -g npm
+
 # Ruby
 DEFAULT_RUBY='2.2.3'
 rbenv install --skip-existing $DEFAULT_RUBY
@@ -30,4 +38,4 @@ rbenv rehash
 # and other global gems
 gem install bundler git-up tmuxinator
 
-source './osx'
+source 'osx'

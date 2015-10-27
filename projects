@@ -24,5 +24,4 @@ if [ ! -d ~/src/gaest-admin ]; then
   rbenv install --skip-existing
   gem install bundler
   bundle
-  rake db:setup db:migrate
 fi

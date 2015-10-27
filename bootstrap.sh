@@ -9,6 +9,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # Install Hombrew
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
 brew update
 brew tap Homebrew/bundle
 brew bundle

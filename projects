@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# gaest-api
+if [ ! -d ~/src/gaest-api ]; then
+  git clone https://github.com/gaest/gaest-api.git ~/src/gaest-api
+  cd ~/src/gaest-api
+  rbenv install --skip-existing
+  gem install bundler
+  bundle
+  rake db:setup db:migrate
+fi
+
+# gaest-web
+if [ ! -d ~/src/gaest-web ]; then
+  git clone https://github.com/gaest/gaest-web.git ~/src/gaest-web
+  cd ~/src/gaest-web
+  npm install
+fi
+
+# gaest-admin
+if [ ! -d ~/src/gaest-admin ]; then
+  git clone https://github.com/gaest/gaest-admin.git ~/src/gaest-admin
+  cd ~/src/gaest-admin
+  rbenv install --skip-existing
+  gem install bundler
+  bundle
+  rake db:setup db:migrate
+fi

@@ -38,4 +38,5 @@ rbenv rehash
 # and other global gems
 gem install bundler git-up tmuxinator
 
+source 'projects'
 source 'osx'

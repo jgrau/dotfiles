@@ -67,6 +67,7 @@ setopt nonomatch
 export DEFAULT_USER=jgrau
 export EDITOR='mvim -v'
 export PURE_GIT_PULL=0
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 bindkey '^R' history-incremental-search-backward
 

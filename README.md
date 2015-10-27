@@ -46,4 +46,3 @@ So the files will start to sync
 * Unzip
 * Find `iterm-solarized`
 * Open `solarized-dark.iterm`
-

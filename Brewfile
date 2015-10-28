@@ -1,6 +1,8 @@
+tap 'homebrew/bundle'
+tap 'caskroom/cask'
+tap 'caskroom/versions'
 tap 'thoughtbot/formulae'
 tap 'neovim/neovim'
-tap 'caskroom/versions'
 
 brew 'rcm'
 brew 'zsh'

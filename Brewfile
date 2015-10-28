@@ -23,6 +23,7 @@ brew 'ctags'
 brew 'direnv'
 brew 'ngrok'
 brew 'awscli'
+brew 'awsebcli'
 
 cask 'virtualbox'
 cask 'google-chrome'

@@ -8,6 +8,7 @@ if [ ! -d ~/src/gaest-api ]; then
   gem install bundler
   bundle
   rake db:setup db:migrate
+  cd -
 fi
 
 # gaest-web
@@ -15,6 +16,7 @@ if [ ! -d ~/src/gaest-web ]; then
   git clone https://github.com/gaest/gaest-web.git ~/src/gaest-web
   cd ~/src/gaest-web
   npm install
+  cd -
 fi
 
 # gaest-admin
@@ -24,4 +26,5 @@ if [ ! -d ~/src/gaest-admin ]; then
   rbenv install --skip-existing
   gem install bundler
   bundle
+  cd -
 fi

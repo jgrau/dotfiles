@@ -16,6 +16,7 @@ if [ ! -d ~/src/gaest-web ]; then
   git clone https://github.com/gaest/gaest-web.git ~/src/gaest-web
   cd ~/src/gaest-web
   npm install
+  npm install -g standard babel babel-eslint
   cd -
 fi
 

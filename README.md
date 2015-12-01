@@ -46,3 +46,9 @@ So the files will start to sync
 * Unzip
 * Find `iterm-solarized`
 * Open `solarized-dark.iterm`
+
+### Make ALT key work in iterm
+
+* Open `iTerm2`
+* Go to `Profiles -> Keys`
+* Set option keys to work like `+ESC`

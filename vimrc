@@ -53,6 +53,8 @@
   Plug 'benekastah/neomake'
   Plug 'Shougo/unite.vim'
   Plug 'Quramy/vison', { 'for': 'json' }
+  Plug 'skalnik/vim-vroom'
+  Plug 'jreybert/vimagit'
 
   filetype plugin indent on                   " required!
   call plug#end()
@@ -65,6 +67,7 @@
   set tabstop=2
   set shiftwidth=2
   set expandtab
+  set timeoutlen=1000 ttimeoutlen=0 " do not wait for esc key combination
 
   "folding settings
   set foldmethod=indent " fold based on indent
@@ -168,6 +171,14 @@
   map <C-H> <C-W>h
   map <C-K> <C-W>k
 
+  " Term
+  tnoremap <Esc> <C-\><C-n>
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+  nmap <leader>c :vsplit<CR>:terminal<CR>
+
   " Move lines
   nnoremap ∆ :m .+1<CR>==
   nnoremap ˚ :m .-2<CR>==
@@ -193,13 +204,13 @@
   " Key mappings
   :noremap ,d :bd<CR>
   cmap w!! w !sudo tee %
-  map ,c :cd %:p:h<CR>
 
   " Ruby 1.8 -> 1.9 Hash syntax
   map <Leader>s :%s/:\([^ ]*\)\(\s*\)=>/\1:/g<CR>
 
   " Quicksave
   nnoremap <Leader>w :w<CR>
+  nnoremap <Leader>q :q<CR>
 " }
 
 
@@ -234,7 +245,7 @@
   " Neomake {
     let g:neomake_verbose = 0
     let g:neomake_ruby_enabled_makers = ['rubocop']
-    let g:neomake_javascript_enabled_makers = []
+    let g:neomake_javascript_enabled_makers = ['standard']
   " }
 
   " Airline {
@@ -267,13 +278,18 @@
     " }
 
     " Vroom {
-      " let g:vroom_use_spring = 1
-      " let g:vroom_use_dispatch = 1
-      " let g:vroom_clear_screen = 0
-      " let g:vroom_use_colors = 1
-      " let g:vroom_use_vimux = 1
-      " let g:vroom_use_binstubs = 1
-      " let g:vroom_write_all  = 0
+      let g:vroom_use_spring = 0
+      let g:vroom_use_dispatch = 0
+      let g:vroom_clear_screen = 1
+      let g:vroom_use_colors = 1
+      let g:vroom_use_vimux = 1
+      let g:vroom_use_binstubs = 1
+      let g:vroom_write_all  = 0
+      let g:vroom_test_unit_command = 'm'
+      nmap <silent> <leader>R :VroomRunNearestTest<CR>
+      nmap <silent> <leader>r :VroomRunTestFile<CR>
+      nmap <silent> <leader>l :VroomRunLastTest<CR>
+      nmap <silent> <leader>a :TestSuite<CR>
     " }
     "
     " Thoughbot rspec.vim {
@@ -292,15 +308,15 @@
     " }
 
     " Vim-test {
-    let g:test#strategy = 'vimux' " basic make dispatch vimux tslime terminal iterm
-    let VimuxUseNearest = 1
-    let g:VimuxHeight = "25"
-    let g:VimuxOrientation = "h"
-    nmap <silent> <leader>R :TestNearest<CR>
-    nmap <silent> <leader>r :TestFile<CR>
-    nmap <silent> <leader>a :TestSuite<CR>
-    nmap <silent> <leader>l :TestLast<CR>
-    nmap <silent> <leader>g :TestVisit<CR>
+      let g:test#strategy = 'vimux' " basic make dispatch vimux tslime terminal iterm
+      let g:VimuxUseNearest = 0
+      let g:VimuxHeight = "25"
+      let g:VimuxOrientation = "h"
+      " nmap <silent> <leader>R :TestNearest<CR>
+      " nmap <silent> <leader>r :TestFile<CR>
+      " nmap <silent> <leader>a :TestSuite<CR>
+      " nmap <silent> <leader>l :TestLast<CR>
+      " nmap <silent> <leader>g :TestVisit<CR>
     " }
   " }
 

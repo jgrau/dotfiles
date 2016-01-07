@@ -16,7 +16,7 @@
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-abolish'
-  " Plug 'tpope/vim-sleuth'
+  Plug 'tpope/vim-sleuth'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-dispatch'
@@ -44,17 +44,18 @@
   Plug 'othree/html5.vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dkprice/vim-easygrep'
-  Plug 'rking/ag.vim'
+  " Plug 'rking/ag.vim'
   Plug 'terryma/vim-expand-region'
-  Plug 'gregsexton/gitv'
+  " Plug 'gregsexton/gitv'
   Plug 'janko-m/vim-test'
   Plug 'benmills/vimux'
   Plug 'ervandew/supertab'
   Plug 'benekastah/neomake'
-  Plug 'Shougo/unite.vim'
-  Plug 'Quramy/vison', { 'for': 'json' }
+  " Plug 'Shougo/unite.vim'
+  " Plug 'Quramy/vison', { 'for': 'json' }
   Plug 'skalnik/vim-vroom'
-  Plug 'jreybert/vimagit'
+  " Plug 'jreybert/vimagit'
+  Plug 'kylef/apiblueprint.vim'
 
   filetype plugin indent on                   " required!
   call plug#end()

@@ -56,6 +56,7 @@
   Plug 'skalnik/vim-vroom'
   " Plug 'jreybert/vimagit'
   Plug 'kylef/apiblueprint.vim'
+  Plug 'jiangmiao/auto-pairs'
 
   filetype plugin indent on                   " required!
   call plug#end()

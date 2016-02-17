@@ -57,6 +57,8 @@
   " Plug 'jreybert/vimagit'
   Plug 'kylef/apiblueprint.vim'
   Plug 'jiangmiao/auto-pairs'
+  Plug 'mxw/vim-jsx'
+  Plug 'moll/vim-node'
 
   filetype plugin indent on                   " required!
   call plug#end()
@@ -348,6 +350,9 @@
   inoremap <M-o> <Esc>o
   inoremap <C-j> <Down>
   let g:ragtag_global_maps = 1
+
+  " JSX
+  let g:jsx_ext_required = 0
 " }
 
 " Functions {

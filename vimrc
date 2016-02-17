@@ -326,11 +326,12 @@
   " Ctrlp
   let g:ctrlp_map = '<Leader>t'
   let g:ctrlp_cmd = 'CtrlP'
-  let g:ctrlp_custom_ignore = {
-        \ 'dir':  'vendor/cache',
-        \ 'file': '\v\.(exe|so|dll)$',
-        \ 'link': 'some_bad_symbolic_links',
-        \ }
+  let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+  " let g:ctrlp_custom_ignore = {
+  "       \ 'dir':  'vendor/cache',
+  "       \ 'file': '\v\.(exe|so|dll)$',
+  "       \ 'link': 'some_bad_symbolic_links',
+  "       \ }
 
   " Ctrlp + ctags
   nnoremap <leader>y :CtrlPTag<cr>

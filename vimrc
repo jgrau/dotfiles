@@ -21,7 +21,6 @@
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-dispatch'
   Plug 'tpope/vim-ragtag'
-  Plug 'tpope/vim-sensible'
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
   Plug 'rodjek/vim-puppet', { 'for': 'puppet' }
   Plug 'scrooloose/nerdtree'

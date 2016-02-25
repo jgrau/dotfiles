@@ -43,7 +43,7 @@
   Plug 'othree/html5.vim'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dkprice/vim-easygrep'
-  " Plug 'rking/ag.vim'
+  Plug 'rking/ag.vim'
   Plug 'terryma/vim-expand-region'
   " Plug 'gregsexton/gitv'
   Plug 'janko-m/vim-test'
@@ -55,7 +55,7 @@
   Plug 'skalnik/vim-vroom'
   " Plug 'jreybert/vimagit'
   Plug 'kylef/apiblueprint.vim'
-  Plug 'jiangmiao/auto-pairs'
+  Plug 'spf13/vim-autoclose'
   Plug 'mxw/vim-jsx'
   Plug 'moll/vim-node'
 

@@ -28,3 +28,7 @@
   prune = true
 [credential]
   helper = osxkeychain
+[alias]
+	ctags = !.git/hooks/ctags
+[init]
+	templatedir = ~/.git_template

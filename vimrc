@@ -108,7 +108,6 @@
     set wildignore+=bin/**
     set wildignore+=log/**
     set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-    set wildignore+=.git/**
     set ignorecase " Case insensitive search
     set smartcase " Case sensitive when uppercase is present
     set incsearch " Search as you type

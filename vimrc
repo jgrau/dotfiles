@@ -213,6 +213,9 @@
   " Quicksave
   nnoremap <Leader>w :w<CR>
   nnoremap <Leader>q :q<CR>
+
+  " Jump to last file with <space><space>
+  nnoremap <leader><leader> <c-^>
 " }
 
 

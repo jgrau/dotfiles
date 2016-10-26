@@ -29,7 +29,6 @@
   Plug 'rizzatti/dash.vim'
   Plug 'pangloss/vim-javascript'
   Plug 'kchmck/vim-coffee-script'
-  Plug 'mileszs/ack.vim'
   Plug 'bling/vim-airline'
   Plug 'altercation/vim-colors-solarized'
   Plug 'nelstrom/vim-textobj-rubyblock'
@@ -54,8 +53,6 @@
   " Plug 'Quramy/vison', { 'for': 'json' }
   Plug 'skalnik/vim-vroom'
   " Plug 'jreybert/vimagit'
-  Plug 'kylef/apiblueprint.vim'
-  Plug 'spf13/vim-autoclose'
   Plug 'mxw/vim-jsx'
   Plug 'moll/vim-node'
 

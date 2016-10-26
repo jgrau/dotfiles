@@ -34,3 +34,5 @@
 	templatedir = ~/.git_template
 [github]
 	user = jgrau
+[ghi]
+	token = !security find-internet-password -a jgrau -s github.com -l 'ghi token' -w

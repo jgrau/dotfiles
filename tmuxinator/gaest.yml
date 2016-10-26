@@ -22,15 +22,9 @@ pre:
 # tmux_command: tmux -CC
 
 windows:
-  - api:
-    - cd gaest-api
-    - vim
-  - api_server:
-    - cd gaest-api
-    - foreman start
   - web:
-    - cd gaest-web
-    - vim
-  - web_server:
-    - cd gaest-web
-    - foreman start
+    layout: ca77,364x83,0,0[364x65,0,0,2,364x17,0,66{182x17,0,66,14,181x17,183,66,15}]
+    panes:
+      - vim
+      - terminal
+      - server

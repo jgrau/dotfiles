@@ -1,6 +1,7 @@
 [user]
-  name = jgrau
+	name = Jonas Grau
   email = jonas.grau@gmail.com
+	signingkey = 701FB978EB0E2A61
 
 [apply]
   whitespace = fix
@@ -30,9 +31,19 @@
   helper = osxkeychain
 [alias]
 	ctags = !.git/hooks/ctags
+	up = pull --rebase --autostash
+	recap = git log --all --oneline --no-merges --author=jonas.grau@gmail.com
 [init]
 	templatedir = ~/.git_template
 [github]
 	user = jgrau
 [ghi]
 	token = !security find-internet-password -a jgrau -s github.com -l 'ghi token' -w
+[color]
+	ui = auto
+[diff]
+	renames = copies
+[merge]
+	stat = true
+[commit]
+	gpgsign = true

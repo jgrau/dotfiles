@@ -1,8 +1,10 @@
+export PATH="$HOME/.cargo/bin:$PATH"
+
 source "$HOME/.antigen/antigen.zsh"
 
 # Load the oh-my-zsh's library.
-# antigen use oh-my-zsh
-antigen bundle robbyrussell/oh-my-zsh lib/
+antigen use oh-my-zsh
+# antigen bundle robbyrussell/oh-my-zsh lib/
 
 antigen bundles <<EOBUNDLES
   # Theme
@@ -12,7 +14,7 @@ antigen bundles <<EOBUNDLES
   # # Git and github autocompletions and aliases
   git
   # git-extras
-  git-flow
+  # git-flow
 
   # # Tools of the trade
   # brew
@@ -26,7 +28,6 @@ antigen bundles <<EOBUNDLES
   # # Meta
   # tmuxinator
   # command-not-found
-  # zsh-users/zsh-syntax-highlighting
   zsh-users/zsh-history-substring-search
 
   # colored-man
@@ -49,13 +50,7 @@ alias mvim="reattach-to-user-namespace mvim"
 alias vim="nvim"
 alias work="cd ~/Sites $1"
 alias reload="source ~/.zshrc"
-alias gff="git flow feature"
-alias gffc="git flow feature checkout"
-alias gffs="git flow feature start"
-alias gfff="git flow feature finish"
-alias gffp="git flow feature publish"
-alias gfft="git flow feature track"
-alias ppr="git flow feature publish \$(current_branch) && hub pull-request"
+alias ppr="git push -u origin \$(git rev-parse --abbrev-ref HEAD) && hub pull-request"
 alias zshbench='reload && /usr/bin/time zsh -i -c exit'
 alias git-clean='git branch --merged | grep -v "\*" | grep -v master | grep -v development | xargs -n 1 git branch -d'
 
@@ -71,6 +66,14 @@ alias dcr='docker-compose run'
 alias dcra='docker-compose run api'
 alias dcrw='docker-compose run web'
 
+alias fix-structure-conflict='git checkout master -- db/structure.sql && make rebuild-database && rails db:migrate && git add db/structure.sql && git rebase --continue'
+alias migr='rails db:migrate db:test:prepare'
+alias fixt='rails db:fixtures:load'
+alias t='rails test'
+alias prodcon='heroku run rails c -r production'
+alias stagcon='heroku run rails c -r staging'
+
+alias git recap='git log --all --oneline --no-merges --author=jonas.grau@gmail.com'
 setopt nonomatch
 # export PATH=/usr/local/bin:/usr/local/share/npm/bin:$PATH:~/bin
 # export PATH=$PATH:/Users/jgrau/pear/bin
@@ -81,9 +84,25 @@ export DEFAULT_USER=jgrau
 export EDITOR='nvim'
 export PURE_GIT_PULL=0
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+export DIGITALOCEAN_ACCESS_TOKEN=19d43d25db0ac54f33948fffa0cd7bb5d7e4bbc74df362d386a68c7aa6c99267
 
 bindkey '^R' history-incremental-search-backward
 
-eval "$(thefuck --alias)"
+# eval "$(thefuck --alias)"
 eval "$(direnv hook zsh)"
 eval "$(rbenv init -)"
+
+source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+
+source <(kubectl completion zsh)
+source <(helm completion zsh)
+export PATH="/usr/local/sbin:$PATH"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
+export PATH="$PATH:~/src/k8s-utils"
+
+autoload -U colors; colors
+source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'

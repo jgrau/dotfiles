@@ -65,6 +65,7 @@
   " Plug 'moll/vim-node'
   " Plug 'jiangmiao/simple-javascript-indenter'
   " Plug 'elixir-lang/vim-elixir'
+  Plug 'mhinz/vim-mix-format'
   " Plug 'skywind3000/asyncrun.vim'
   Plug 'jgrau/neoformat', { 'branch': 'configure-rufo-exitcodes' }
   " Plug 'pearofducks/ansible-vim'
@@ -290,8 +291,9 @@
     " let g:ale_enabled = 1
     let g:ale_fixers = {}
     let g:ale_fixers.javascript = ['eslint']
+    let g:ale_fixers.elixir = []
     let g:ale_fix_on_save = 0
-    let g:ale_linters = { 'ruby': ['ruby', 'rubocop'], 'javascript': ['eslint'] }
+    let g:ale_linters = { 'ruby': ['ruby', 'rubocop'], 'javascript': ['eslint'], 'elixir': [] }
     " let g:ale_lint_on_text_changed = 'normal' " or 'never'
     let g:ale_lint_on_enter = 1
     let g:ale_lint_delay = 1000
@@ -310,6 +312,7 @@
   " Neoformat {
     autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --single-quote\ --semi=false\ --trailing-comma\ es5
     let g:neoformat_enabled_ruby = ['rufo']
+    let g:neoformat_enabled_elixir = []
     " autocmd FileType ruby setlocal formatprg=rufo
 
     let g:neoformat_only_msg_on_error = 1

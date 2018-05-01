@@ -56,7 +56,7 @@
   Plug 'ajh17/VimCompletesMe'
   " Plug 'benekastah/neomake'
   Plug 'w0rp/ale'
-  Plug 'kassio/neoterm'
+  " Plug 'kassio/neoterm'
   " Plug 'Shougo/unite.vim'
   " Plug 'Quramy/vison', { 'for': 'json' }
   " Plug 'skalnik/vim-vroom'
@@ -147,12 +147,9 @@
   set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
   " Vim UI {
-    colorscheme solarized " GUI Colorscheme
-    set background=dark
-
-    if &t_Co > 2 || has("gui_running")
-      syntax on " switch syntax highlighting on, when the terminal has colors
-    endif
+    syntax enable " switch syntax highlighting on, when the terminal has colors
+    " set background=dark
+    " colorscheme solarized " GUI Colorscheme
   " }
 
   " GVim {
@@ -187,7 +184,7 @@
   " map <C-K> <C-W>k
 
   " Term
-  autocmd TermOpen * let b:ale_enabled=0
+  " autocmd TermOpen * let b:ale_enabled=0
   autocmd BufEnter * if &buftype == "terminal" | startinsert | endif
   " tnoremap ii <C-\><C-n>
   tnoremap <C-h> <C-\><C-n><C-w>h
@@ -384,7 +381,7 @@
     " }
 
     " Vim-test {
-      let g:test#strategy = 'neoterm' " basic make dispatch vimux tslime neoterm vimshell vtr vimproc asyncrun terminal iterm
+      let g:test#strategy = 'basic' " basic make dispatch vimux tslime neoterm vimshell vtr vimproc asyncrun terminal iterm
       " let g:VimuxUseNearest = 1
       " let g:VimuxHeight = "25"
       " let g:VimuxOrientation = "h"

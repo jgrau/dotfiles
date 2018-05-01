@@ -9,24 +9,24 @@ setopt inc_append_history
 setopt share_history # share command history data
 setopt hist_ignore_all_dups
 
-export PATH="/usr/local/sbin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export ZPLUG_HOME=/usr/local/opt/zplug
-export DEFAULT_USER=jgrau
-export EDITOR='nvim'
-export VISUAL='nvim'
-export PURE_GIT_PULL=0
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+# export PATH="/usr/local/sbin:$PATH"
+# export PATH="$HOME/.cargo/bin:$PATH"
+# export ZPLUG_HOME=/usr/local/opt/zplug
+# export DEFAULT_USER=jgrau
+# export EDITOR='nvim'
+# export VISUAL='nvim'
+# export PURE_GIT_PULL=0
+# export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-source <(kubectl completion zsh)
-source <(helm completion zsh)
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+# source <(kubectl completion zsh)
+# source <(helm completion zsh)
 
 eval "$(direnv hook zsh)"
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 
-alias vim="nvim"
+# alias vim="nvim"
 alias reload="source ~/.zshrc"
 alias ppr="git push -u origin \$(git rev-parse --abbrev-ref HEAD) && hub pull-request"
 alias git-clean='git branch --merged | grep -v "\*" | grep -v master | grep -v development | xargs -n 1 git branch -d'
@@ -48,6 +48,7 @@ zplug "plugins/z", from:oh-my-zsh
 zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
+zplug "kiurchv/asdf.plugin.zsh", defer:2
 
 # Install if not installed
 zplug check || zplug install

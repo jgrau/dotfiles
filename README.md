@@ -1,54 +1,67 @@
 # Dotfiles
 
-## Usage
+## Bootstrap
+
+### Install stuff
 
 ```
-git clone https://github.com/jgrau/legacy-dotfiles.git ~/.dotfiles
-sh ~/.dotfiles/bootstrap.sh
+sudo pacman -S zsh yaourt termite ctags tig
+yaourt direnv
 ```
 
-## Manual steps
+### Configure
 
-### Gitx
+- Change default shell: `chsh /bin/zsh jgrau`
 
-* Open `GitX`
-* Go to menu `GitX` -> `Enable Terminal Usage`
+### Set up rcm
 
-### Caps Lock -> CTRL
+```
+yaourt rcm
+```
 
-* Open `Keyboard Preferences`
-* Cick `Modifier Keys...`
-* Select `^ Control` as the `Caps Lock` key
+### Clone the dotfiles directory
 
-### Change Shell
+`git clone https://github.com/jgrau/dotfiles.git ~/.dotfiles`
 
-* `sudo vim /etc/shells`
-* Add `/usr/local/bin/zsh`
-* `chsh -s /usr/local/bin/zsh`
 
-### Autolaunch launchbar
+## More things to do
 
-* Open `Users & Groups preferences`
-* Add `LaunchBar`
+### Swap ALT and CMD on a mac keyboard
 
-### Autolaunch slate
+```
+echo options hid_apple swap_opt_cmd=1 | \
+sudo tee -a /etc/modprobe.d/hid_apple.conf
+```
 
-* Open `Slate`
-* In the slate menu, click `Launch slate on login`
+Not sure, but this may need to update the initramfs which I think `sudo update-grub` does.
 
-### Launch dropbox
+### Solarized colors
 
-So the files will start to sync
+```
+git clone git://github.com/alpha-omega/termite-colors-solarized.git
+mkdir -p ~/.config/termite
+cd termite-colors-solarized
+cp solarized-dark ~/.config/termite/config
+```
 
-### Set solarized iterm colors
+### asdf package manager
 
-* `wget http://ethanschoonover.com/solarized/files/solarized.zip`
-* Unzip
-* Find `iterm-solarized`
-* Open `solarized-dark.iterm`
+```
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
+asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
+```
 
-### Make ALT key work in iterm
+### Postgres
 
-* Open `iTerm2`
-* Go to `Profiles -> Keys`
-* Set option keys to work like `+ESC`
+```
+sudo pacman -S postgresql
+# or
+yaourt postgresql-9.6
+
+sudo -u postgres -i
+initdb --locale en_US.UTF-8 -E UTF8 -D '/var/lib/postgres/data'
+```

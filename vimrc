@@ -44,19 +44,20 @@
   " Plug 'majutsushi/tagbar'
   Plug 'AndrewRadev/splitjoin.vim'
   " Plug 'othree/html5.vim'
-  " Plug 'christoomey/vim-tmux-navigator'
+  Plug 'christoomey/vim-tmux-navigator'
   " Plug 'dkprice/vim-easygrep'
   " Plug 'rking/ag.vim'
   Plug 'mileszs/ack.vim'
   Plug 'terryma/vim-expand-region'
   " Plug 'gregsexton/gitv'
+  Plug 'skywind3000/asyncrun.vim'
   Plug 'janko-m/vim-test'
-  " Plug 'benmills/vimux'
+  Plug 'benmills/vimux'
   " Plug 'ervandew/supertab'
   Plug 'ajh17/VimCompletesMe'
   " Plug 'benekastah/neomake'
   Plug 'w0rp/ale'
-  " Plug 'kassio/neoterm'
+  Plug 'kassio/neoterm'
   " Plug 'Shougo/unite.vim'
   " Plug 'Quramy/vison', { 'for': 'json' }
   " Plug 'skalnik/vim-vroom'
@@ -67,12 +68,13 @@
   " Plug 'elixir-lang/vim-elixir'
   Plug 'mhinz/vim-mix-format'
   " Plug 'skywind3000/asyncrun.vim'
-  Plug 'jgrau/neoformat', { 'branch': 'configure-rufo-exitcodes' }
+  Plug 'sbdchd/neoformat'
   " Plug 'pearofducks/ansible-vim'
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   " Plug 'luan/vim-concourse'
   Plug 'justinmk/vim-sneak'
+  Plug 'jparise/vim-graphql'
 
   filetype plugin indent on                   " required!
   call plug#end()
@@ -148,8 +150,8 @@
 
   " Vim UI {
     syntax enable " switch syntax highlighting on, when the terminal has colors
-    " set background=dark
-    " colorscheme solarized " GUI Colorscheme
+    set background=dark
+    colorscheme solarized " GUI Colorscheme
   " }
 
   " GVim {
@@ -200,9 +202,6 @@
   nnoremap <C-j> <C-w>j
   nnoremap <C-k> <C-w>k
   nnoremap <C-l> <C-w>l
-
-  " Show buffers
-  
 
   " Move lines
   nnoremap ∆ :m .+1<CR>==
@@ -307,8 +306,9 @@
   " }
 
   " Neoformat {
-    autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --single-quote\ --semi=false\ --trailing-comma\ es5
+    " autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --single-quote\ --semi=false\ --trailing-comma\ es5
     let g:neoformat_enabled_ruby = ['rufo']
+    let g:neoformat_enabled_javascript = []
     let g:neoformat_enabled_elixir = []
     " autocmd FileType ruby setlocal formatprg=rufo
 
@@ -381,10 +381,10 @@
     " }
 
     " Vim-test {
-      let g:test#strategy = 'basic' " basic make dispatch vimux tslime neoterm vimshell vtr vimproc asyncrun terminal iterm
-      " let g:VimuxUseNearest = 1
-      " let g:VimuxHeight = "25"
-      " let g:VimuxOrientation = "h"
+      let g:test#strategy = 'vimux' " basic make dispatch vimux tslime neoterm vimshell vtr vimproc asyncrun terminal iterm
+      let g:VimuxUseNearest = 1
+      let g:VimuxHeight = "25"
+      let g:VimuxOrientation = "h"
       nmap <silent> <leader>R :TestNearest<CR>
       nmap <silent> <leader>r :TestFile<CR>
       nmap <silent> <leader>a :TestSuite<CR>
@@ -454,8 +454,13 @@
   " nnoremap <silent> <C-b> :TmuxNavigatePrevious<cr>
 
   " neoterm
+  filetype off
+  let &runtimepath.=',~/.vim/bundle/neoterm'
+  filetype plugin on
+
   let g:neoterm_size = 50
-  let g:neoterm_position = 'vertical'
+  let g:neoterm_default_mod = 'vertical botright'
+  " let g:neoterm_position = 'vertical'
   let g:terminal_scrollback_buffer_size = 1000
 " }
 "

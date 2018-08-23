@@ -1,4 +1,4 @@
-source '/home/jgrau/.zshrc.local'
+source "$HOME/.zshrc.local"
 
 setopt nonomatch
 setopt append_history
@@ -22,8 +22,6 @@ export EDITOR='vim'
 export VISUAL='vim'
 # export PURE_GIT_PULL=0
 # export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-export POSTGRESQL_USER=postgres
-export PGUSER=postgres
 
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'

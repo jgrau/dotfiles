@@ -151,7 +151,8 @@
   " Vim UI {
     syntax enable " switch syntax highlighting on, when the terminal has colors
     set background=dark
-    colorscheme solarized " GUI Colorscheme
+    " colorscheme solarized " GUI Colorscheme
+    colorscheme default " GUI Colorscheme
   " }
 
   " GVim {

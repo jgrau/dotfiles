@@ -287,6 +287,8 @@ exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
 exec_always setxkbmap -option -option ctrl:nocaps,grp:shift_toggle,grp_led:scroll us,dk
+bindsym Mod4+Shift+3 exec scrot '%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f ~/Pictures/'
+bindsym Mod4+Shift+4 exec gnome-screenshot -i
 
 # Color palette used for the terminal ( ~/.Xresources file )
 # Colors are gathered based on the documentation:

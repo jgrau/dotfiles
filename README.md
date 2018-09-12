@@ -5,8 +5,8 @@
 ### Install stuff
 
 ```
-sudo pacman -S zsh yaourt termite ctags tig
 yaourt direnv
+sudo pacman -S zsh yaourt termite ctags tig
 ```
 
 ### Configure
@@ -64,4 +64,14 @@ yaourt postgresql-9.6
 
 sudo -u postgres -i
 initdb --locale en_US.UTF-8 -E UTF8 -D '/var/lib/postgres/data'
+```
+
+
+### Docker
+
+```
+sudo pacman -S docker docker-compose docker-machine
+sudo usermod -a -G docker jgrau
+systemctl enable docker
+systemctl start docker
 ```

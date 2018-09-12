@@ -22,7 +22,7 @@ export EDITOR='vim'
 export VISUAL='vim'
 # export PURE_GIT_PULL=0
 # export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-export DIGITALOCEAN_ACCESS_TOKEN=19d43d25db0ac54f33948fffa0cd7bb5d7e4bbc74df362d386a68c7aa6c99267
+export DIGITALOCEAN_ACCESS_TOKEN=68503ad4e128d49df44d13e53122fa897f503d27a2bc0afc73394988325d7c50
 
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'

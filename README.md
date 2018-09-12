@@ -5,8 +5,8 @@
 ### Install stuff
 
 ```
-yaourt direnv
 sudo pacman -S zsh yaourt termite ctags tig
+yaourt direnv howdoi
 ```
 
 ### Configure

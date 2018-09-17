@@ -11,6 +11,7 @@ setopt inc_append_history
 setopt share_history # share command history data
 setopt hist_ignore_all_dups
 
+export PATH="$HOME/bin:$PATH"
 # export PATH="/usr/local/sbin:$PATH"
 # export PATH="$HOME/.cargo/bin:$PATH"
 # export ZPLUG_HOME=/usr/local/opt/zplug

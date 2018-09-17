@@ -5,9 +5,11 @@
 ### Install stuff
 
 ```
-sudo pacman -S zsh yaourt termite ctags tig
+sudo pacman -S zsh yaourt termite ctags gvim tig
 yaourt direnv howdoi
 ```
+
+Note: `gvim` is installed to support copying to system clipboard
 
 ### Configure
 

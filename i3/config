@@ -286,7 +286,7 @@ exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 
-exec_always setxkbmap -option -option ctrl:nocaps,grp:shift_toggle,grp_led:scroll us,dk
+exec_always setxkbmap -option -option ctrl:nocaps,grp:alt_space_toggle,grp_led:scroll us,dk
 bindsym Mod4+Shift+3 exec scrot '%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f ~/Pictures/'
 bindsym Mod4+Shift+4 exec gnome-screenshot -i
 

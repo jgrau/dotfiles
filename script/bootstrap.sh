@@ -12,6 +12,7 @@ sudo apt --yes install \
   direnv \
   golang-go \
   shellcheck \
+  chromium-browser
 
 # Change the shell to zsh
 if [ "$(getent passwd "$LOGNAME" | cut -d: -f7)" != "/bin/zsh" ]; then

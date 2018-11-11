@@ -70,8 +70,9 @@
   " Plug 'skywind3000/asyncrun.vim'
   Plug 'sbdchd/neoformat'
   " Plug 'pearofducks/ansible-vim'
-  Plug '/usr/local/opt/fzf'
-  Plug 'junegunn/fzf.vim'
+  " Plug '/usr/local/opt/fzf'
+  " Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   " Plug 'luan/vim-concourse'
   Plug 'justinmk/vim-sneak'
   Plug 'jparise/vim-graphql'

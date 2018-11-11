@@ -55,3 +55,19 @@ fi
 
 # Install shfmt
 go get -u mvdan.cc/sh/cmd/shfmt
+
+if [ ! -d "$HOME"/.asdf ]; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+
+  "$HOME"/.asdf/bin/asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+  "$HOME"/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+  "$HOME"/.asdf/bin/asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
+  "$HOME"/.asdf/bin/asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
+fi
+
+if [ ! -d "$HOME"/src/gaest ]; then
+  mkdir -p "$HOME"/src
+
+  # Clone the dotfiles
+  git clone git@github.com:gaest/gaest.git "$HOME"/src/gaest
+fi

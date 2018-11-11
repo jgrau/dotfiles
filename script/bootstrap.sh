@@ -10,7 +10,8 @@ sudo apt --yes install \
   software-properties-common \
   tmux \
   direnv \
-  golang-go
+  golang-go \
+  shellcheck \
 
 # Change the shell to zsh
 if [ "$(getent passwd "$LOGNAME" | cut -d: -f7)" != "/bin/zsh" ]; then

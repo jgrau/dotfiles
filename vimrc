@@ -76,6 +76,7 @@
   " Plug 'luan/vim-concourse'
   Plug 'justinmk/vim-sneak'
   Plug 'jparise/vim-graphql'
+  Plug 'z0mbix/vim-shfmt'
 
   filetype plugin indent on                   " required!
   call plug#end()
@@ -290,6 +291,7 @@
     let g:ale_fixers = {}
     let g:ale_fixers.javascript = ['eslint']
     let g:ale_fixers.elixir = []
+    let g:ale_fixers.sh = ['shfmt']
     let g:ale_fix_on_save = 0
     let g:ale_linters = { 'ruby': ['ruby', 'rubocop'], 'javascript': ['eslint'], 'elixir': [] }
     " let g:ale_lint_on_text_changed = 'normal' " or 'never'
@@ -464,6 +466,10 @@
   let g:neoterm_default_mod = 'vertical botright'
   " let g:neoterm_position = 'vertical'
   let g:terminal_scrollback_buffer_size = 1000
+
+  " shfmt
+  " let g:shfmt_fmt_on_save = 1
+  " let g:shfmt_extra_args = '-i 2'
 " }
 "
 " Functions {

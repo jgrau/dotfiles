@@ -12,6 +12,7 @@ setopt share_history # share command history data
 setopt hist_ignore_all_dups
 
 export PATH="$HOME/bin:$HOME/go/bin:$PATH"
+export GOPATH="$HOME/go"
 # export PATH="/usr/local/sbin:$PATH"
 # export PATH="$HOME/.cargo/bin:$PATH"
 # export ZPLUG_HOME=/usr/local/opt/zplug

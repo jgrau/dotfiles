@@ -73,6 +73,7 @@
   " Plug '/usr/local/opt/fzf'
   " Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
   " Plug 'luan/vim-concourse'
   Plug 'justinmk/vim-sneak'
   Plug 'jparise/vim-graphql'
@@ -152,8 +153,9 @@
 
   " Vim UI {
     syntax enable " switch syntax highlighting on, when the terminal has colors
+    let g:solarized_termcolors=16
     " colorscheme solarized " GUI Colorscheme
-    set background=dark
+    " set background=dark
     " colorscheme default " GUI Colorscheme
   " }
 
@@ -303,6 +305,7 @@
     " let g:ale_open_list = 1
     " let g:ale_keep_list_window_open = 1
     " let g:ale_sign_column_always = 1
+    " let g:ale_echo_cursor = 0
   " }
 
   " Rubocop autocorrect {

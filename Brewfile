@@ -1,59 +1,34 @@
 cask_args appdir: "/Applications"
 
-tap 'homebrew/bundle'
-tap 'caskroom/cask'
-#tap 'caskroom/versions'
-tap 'thoughtbot/formulae'
-
-brew 'rcm'
-brew 'zsh'
-brew 'vim', args: ['override-system-vi']
-brew 'neovim', args: ['HEAD']
-#brew 'reattach-to-user-namespace'
 brew 'ack'
-brew 'git'
-#brew 'imagemagick'
-brew 'node'
-brew 'tmux'
-#brew 'thefuck'
-brew 'postgresql@9.6', restart_service: true, link: true, conflicts_with: ["postgresql"]
-#brew 'rbenv'
-#brew 'ruby-build'
-brew 'hub'
-brew 'wget'
 brew 'ctags'
 brew 'direnv'
-#brew 'docker'
-#brew 'docker-machine'
-#brew 'docker-compose'
-#brew 'graphviz'
-#brew 'heroku-toolbelt'
-brew 'redis', restart_service: true
+brew 'doctl'
+brew 'git'
+brew 'mas'
+brew 'neovim', args: ['HEAD']
+brew 'node'
+brew 'rbenv'
+brew 'rcm'
+brew 'ruby-build'
+brew 'terraform'
+brew 'tig'
+brew 'tmux'
+brew 'wget'
+brew 'whalebrew'
+brew 'zsh'
+brew 'helm'
 
-# Required by the asdf package manager
-brew 'coreutils'
-brew 'automake'
-brew 'autoconf'
-brew 'openssl'
-brew 'libyaml'
-brew 'readline'
-brew 'libxslt'
-brew 'libtool'
-brew 'unixodbc'
-
-cask 'virtualbox'
-cask 'google-chrome'
-#cask 'firefox'
-#cask 'dropbox'
 cask 'iterm2'
-cask 'skype'
-cask 'slate'
 cask 'spotify'
-cask 'transmission'
-cask 'rowanj-gitx'
-cask 'istat-menus'
 cask 'alfred'
-cask 'diffmerge'
-cask 'java'
-cask 'vlc'
 cask 'docker'
+cask 'slack'
+
+mas 'Magnet', id: 441258766
+
+tap 'drone/drone'
+brew 'drone'
+
+tap 'hashicorp/tap'
+brew 'hashicorp/tap/waypoint'

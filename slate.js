@@ -23,7 +23,8 @@ slate.configAll({
 });
 
 // Focus apps
-slate.bind("=:ctrl", $.focus('Google Chrome'));
+// slate.bind("=:ctrl", $.focus('Google Chrome'));
+slate.bind("=:ctrl", $.focus('Brave'));
 slate.bind("-:ctrl", $.focus('iTerm2'));
 // slate.bind("-:ctrl", $.focus('Hyper'));
 

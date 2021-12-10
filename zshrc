@@ -1,4 +1,9 @@
-source "$HOME/.zshrc.local"
+source "$HOME/.zshrc.exports"
+source "$HOME/.zshrc.credentials"
+source "$HOME/.zshrc.gcl"
+source "$HOME/.zshrc.kubectl_aliases"
+source "$HOME/.zshrc.completions"
+# source "$HOME/.zshrc.local"
 
 setopt nonomatch
 setopt append_history
@@ -11,36 +16,12 @@ setopt inc_append_history
 setopt share_history # share command history data
 setopt hist_ignore_all_dups
 
-export PATH="$HOME/bin:$HOME/go/bin:$PATH"
-export GOPATH="$HOME/go"
-# export PATH="/usr/local/sbin:$PATH"
-# export PATH="$HOME/.cargo/bin:$PATH"
-# export ZPLUG_HOME=/usr/local/opt/zplug
-# export DEFAULT_USER=jgrau
-# export EDITOR='nvim'
-# export VISUAL='nvim'
-export TERMINAL='termite'
-export EDITOR='vim'
-export VISUAL='vim'
-# export PURE_GIT_PULL=0
-# export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-# source <(kubectl completion zsh)
-# source <(helm completion zsh)
-
 eval "$(direnv hook zsh)"
-# eval "$(rbenv init -)"
 
-# alias vim="nvim"
 alias reload="source ~/.zshrc"
-alias ppr="git push -u origin \$(git rev-parse --abbrev-ref HEAD) && hub pull-request"
+alias ppr="git push -u origin \$(git rev-parse --abbrev-ref HEAD) && gh pr create"
 alias git-clean='git branch --merged | grep -v "\*" | grep -v master | grep -v development | xargs -n 1 git branch -d'
-alias fix-structure-conflict='git checkout master -- db/structure.sql && make rebuild-database && rails db:migrate && git add db/structure.sql && git rebase --continue'
-alias migr='rails db:migrate:with_data db:test:prepare'
-alias fixt='rails db:fixtures:load'
-alias t='rails test'
+alias vim=nvim
 
 # zplug
 [[ -r "${HOME}/.zplug/init.zsh" ]] || git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
@@ -56,6 +37,8 @@ zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
 zplug "kiurchv/asdf.plugin.zsh", defer:2
+zplug "lukechilds/zsh-nvm"
+zplug "plugins/tmux", from:oh-my-zsh
 
 # Install if not installed
 zplug check || zplug install
@@ -79,18 +62,21 @@ case $HIST_STAMPS in
   *) alias history='fc -l 1' ;;
 esac
 
-# Enable Ctrl-x-e to edit command line
-autoload -U edit-command-line
-# Emacs style
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
-# Vi style:
-# zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
-
 # History search
 bindkey '^R' history-incremental-search-backward
+
+# Edit command line
+# Enable Ctrl-x-e to edit command line
+autoload -U edit-command-line
+
+# Emacs style
+# zle -N edit-command-line
+# bindkey '^xe' edit-command-line
+# bindkey '^x^e' edit-command-line
+
+# Vi style:
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 
 if [[ ! -d ~/.tmux/plugins/tpm ]] ; then
   echo "tpm not available, set it up with 'tpm-install' (needs Git and Internet access)"
@@ -104,3 +90,12 @@ fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+test -e /Users/jgrau/.iterm2_shell_integration.zsh && source /Users/jgrau/.iterm2_shell_integration.zsh || true
+
+# GPG
+GPG_TTY=$(tty)
+export GPG_TTY
+. "/Users/jgrau/.acme.sh/acme.sh.env"
+
+# rbenv
+eval "$(rbenv init - zsh)"

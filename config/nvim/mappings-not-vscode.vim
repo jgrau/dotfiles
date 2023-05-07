@@ -47,3 +47,7 @@
   " Rubocop autocorrect {
     nmap <Leader>u :!rubocop -a %<CR>
   " }
+
+" Quickly edit/reload the vimrc file
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>

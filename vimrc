@@ -6,46 +6,49 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
 call plug#begin('~/.config/nvim/autoload/plugged')
 
-Plug 'tpope/vim-commentary'
+Plug 'AndrewRadev/switch.vim'
+Plug 'justinmk/vim-sneak'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-markdown', { 'for': 'markdown' }
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-abolish'
-Plug 'justinmk/vim-sneak'
 
-if exists('g:vscode')
-  " Plug 'machakann/vim-highlightedyank'
-else
-  Plug 'nelstrom/vim-textobj-rubyblock'
-  Plug 'sheerun/vim-polyglot'
-  Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-sleuth'
-  Plug 'tpope/vim-endwise'
-  Plug 'scrooloose/nerdtree'
-  Plug 'itchyny/lightline.vim'
-  Plug 'altercation/vim-colors-solarized'
-  Plug 'kana/vim-textobj-user'
-  Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'mileszs/ack.vim'
-  Plug 'skywind3000/asyncrun.vim'
-  Plug 'janko-m/vim-test'
-  Plug 'benmills/vimux'
-  Plug 'w0rp/ale'
-  Plug 'sbdchd/neoformat'
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-  Plug 'jparise/vim-graphql'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'b4b4r07/vim-hcl'
-  Plug 'fatih/vim-hclfmt'
-endif
+" Not activated for vscode
+Plug 'tpope/vim-bundler', Cond(!exists('g:vscode'))
+Plug 'tpope/vim-markdown', Cond(!exists('g:vscode'), { 'for': 'markdown' })
+Plug 'tpope/vim-rails', Cond(!exists('g:vscode'))
+Plug 'AndrewRadev/splitjoin.vim', Cond(!exists('g:vscode'))
+Plug 'altercation/vim-colors-solarized', Cond(!exists('g:vscode'))
+Plug 'b4b4r07/vim-hcl', Cond(!exists('g:vscode'))
+Plug 'benmills/vimux', Cond(!exists('g:vscode'))
+Plug 'christoomey/vim-tmux-navigator', Cond(!exists('g:vscode'))
+Plug 'fatih/vim-hclfmt', Cond(!exists('g:vscode'))
+Plug 'itchyny/lightline.vim', Cond(!exists('g:vscode'))
+Plug 'janko-m/vim-test', Cond(!exists('g:vscode'))
+Plug 'jparise/vim-graphql', Cond(!exists('g:vscode'))
+Plug 'junegunn/fzf', Cond(!exists('g:vscode'), { 'dir': '~/.fzf', 'do': './install --all' })
+Plug 'junegunn/fzf.vim', Cond(!exists('g:vscode'))
+Plug 'mileszs/ack.vim', Cond(!exists('g:vscode'))
+Plug 'neoclide/coc.nvim', Cond(!exists('g:vscode'), {'branch': 'release'})
+Plug 'sbdchd/neoformat', Cond(!exists('g:vscode'))
+Plug 'scrooloose/nerdtree', Cond(!exists('g:vscode'))
+Plug 'sheerun/vim-polyglot', Cond(!exists('g:vscode'))
+Plug 'skywind3000/asyncrun.vim', Cond(!exists('g:vscode'))
+Plug 'tpope/vim-commentary', Cond(!exists('g:vscode'))
+Plug 'tpope/vim-dispatch', Cond(!exists('g:vscode'))
+Plug 'tpope/vim-sleuth', Cond(!exists('g:vscode'))
+Plug 'w0rp/ale', Cond(!exists('g:vscode'))
+Plug 'adelarsq/vim-matchit', Cond(!exists('g:vscode'))
+Plug 'kana/vim-textobj-user', Cond(!exists('g:vscode'))
+Plug 'nelstrom/vim-textobj-rubyblock', Cond(!exists('g:vscode'))
 
 call plug#end()
 
@@ -63,6 +66,7 @@ if exists('g:vscode')
   source $HOME/.config/nvim/settings-vscode.vim
   source $HOME/.config/nvim/mappings-vscode.vim
 else
+  source $HOME/.config/nvim/settings-not-vscode.vim
   source $HOME/.config/nvim/mappings-not-vscode.vim
   source $HOME/.config/nvim/plugin-config-not-vscode.vim
 endif

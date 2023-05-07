@@ -54,6 +54,3 @@
 
     let g:ag_prg="ag --follow --vimgrep"
   " }
-
-" You can't stop me
-cmap w!! w !sudo tee %

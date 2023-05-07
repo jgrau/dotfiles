@@ -5,6 +5,7 @@ tap "drone/drone"
 tap "hashicorp/tap"
 tap "heroku/brew"
 tap "homebrew/cask"
+tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
 
@@ -52,6 +53,7 @@ cask '1password-beta'
 cask 'alfred'
 cask 'brave-browser'
 cask 'dash'
+cask 'font-meslo-lg-nerd-font'
 cask 'graphiql'
 cask 'iterm2'
 cask 'lens'

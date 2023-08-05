@@ -1,5 +1,6 @@
 alias vim=nvim
 alias reload="source ~/.config/fish/config.fish"
+alias ppr="gh pr create"
 
 set -gx EDITOR nvim
 

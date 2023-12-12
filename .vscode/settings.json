@@ -1,0 +1,11 @@
+{
+  "[lua]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[plaintext]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
+}

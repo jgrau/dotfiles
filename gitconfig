@@ -1,14 +1,14 @@
 # This is Git's per-user configuration file.
 [user]
 # Please adapt and uncomment the following lines:
-	name = Jonas Grau
-	email = jonas.grau@gmail.com
+name = Jonas Grau
+email = jonas.grau@gmail.com
 [core]
-	excludesfile = /Users/jgrau/.gitignore
-	attributesfile = /Users/jgrau/.gitattributes
+excludesfile = /Users/jgrau/.gitignore
+attributesfile = /Users/jgrau/.gitattributes
 [pull]
-	rebase = true
+rebase = true
 [diff "rspec"]
-	xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario)[ \t].*)$"
+xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario)[ \t].*)$"
 [diff]
-	external = difft
+external = difft

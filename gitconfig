@@ -12,3 +12,10 @@ rebase = true
 xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario)[ \t].*)$"
 [diff]
 external = difft
+	algorithm = histogram
+[merge]
+	conflictStyle = zdiff3
+[commit]
+	verbose = true
+[rerere]
+	enabled = true

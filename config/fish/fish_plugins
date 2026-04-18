@@ -1,11 +1,10 @@
-ilancosman/tide
 jethrokuan/z
 patrickf1/fzf.fish
 franciscolourenco/done
 jorgebucaran/autopair.fish
 nickeb96/puffer-fish
-rstacruz/fish-asdf
-halostatue/fish-brew@2.x
 jhillyerd/plugin-git
 z11i/github-copilot-cli.fish
 gazorby/fish-abbreviation-tips
+ilancosman/tide@v6
+halostatue/fish-direnv@v1

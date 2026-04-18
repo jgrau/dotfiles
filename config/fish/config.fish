@@ -12,3 +12,12 @@ functions -e !! git! gh!
 alias , __copilot_what-the-shell
 alias ,g __copilot_git-assist
 alias ,gh __copilot_gh-assist
+
+# pnpm
+set -gx PNPM_HOME "/Users/jgrau/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
+
+direnv hook fish | source

@@ -56,6 +56,7 @@ require("packer").startup(function(use)
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	})
 
+	use("AndrewRadev/switch.vim")
 	use("christoomey/vim-tmux-navigator")
 	use("joshdick/onedark.vim")
 	use("junegunn/goyo.vim")
@@ -67,7 +68,7 @@ require("packer").startup(function(use)
 	use("tpope/vim-surround")
 	use("tpope/vim-unimpaired")
 	use("tpope/vim-vinegar")
-	use("AndrewRadev/switch.vim")
+  use("yegappan/greplace")
 
 	use({
 		"folke/trouble.nvim",

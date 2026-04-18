@@ -8,11 +8,6 @@ set -gx EDITOR nvim
 # https://github.com/z11i/github-copilot-cli.fish
 functions -e !! git! gh!
 
-# Instead create our own aliases
-alias , __copilot_what-the-shell
-alias ,g __copilot_git-assist
-alias ,gh __copilot_gh-assist
-
 # pnpm
 set -gx PNPM_HOME "/Users/jgrau/Library/pnpm"
 if not string match -q -- $PNPM_HOME $PATH

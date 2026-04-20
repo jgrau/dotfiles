@@ -1,0 +1,4 @@
+[whitelist]
+exact = ["~/src/landfolk", "~/src/pax"]
+prefix = ["~/src/landfolk.", "~/src/pax."]
+

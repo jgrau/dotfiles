@@ -32,7 +32,6 @@ return {
       -- Keymaps
       local bind = vim.keymap.set
       -- Find files tracked by git (faster than find_files in large repos)
-      bind("n", "<leader>p",  builtin.git_files, { desc = "Find git files" })
       bind("n", "<leader>ff", builtin.git_files, { desc = "Find git files" })
       -- Find all files (including untracked)
       bind("n", "<leader>fF", builtin.find_files, { desc = "Find all files" })

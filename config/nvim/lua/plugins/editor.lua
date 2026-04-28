@@ -22,6 +22,24 @@ return {
   -- Git integration. :Git (or :G) to open the git summary, :GBlame, etc.
   "tpope/vim-fugitive",
 
+  -- LazyGit terminal UI inside Neovim. <leader>gg opens the Git cockpit.
+  {
+    "kdheepak/lazygit.nvim",
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    keys = {
+      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+    },
+  },
+
   -- Makes the . (repeat) command work with plugin mappings, not just native ones.
   "tpope/vim-repeat",
 

@@ -5,7 +5,7 @@ name = Jonas Grau
 email = jonas.grau@gmail.com
 [core]
 excludesfile = /Users/jgrau/.gitignore
-attributesfile = /Users/jgrau/.gitattributes
+	attributesfile = /Users/jgrau/.gitattributes
 [pull]
 rebase = true
 [diff "rspec"]

@@ -1,7 +1,10 @@
 alias vim=nvim
 alias reload="source ~/.config/fish/config.fish"
 alias ppr="gh pr create"
-alias pax="~/src/pax/bin/pax --cwd (pwd)"
+fish_add_path /Users/jgrau/src/pax/bin
+alias wts="wt switch"
+alias wtsm="wt switch main"
+alias wtc="wt switch --create"
 
 set -gx EDITOR nvim
 
@@ -15,5 +18,7 @@ if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+
+tv init fish | source
 
 direnv hook fish | source

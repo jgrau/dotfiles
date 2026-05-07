@@ -1,10 +1,12 @@
+fish_add_path /Users/jgrau/src/pax/bin
+
 alias vim=nvim
 alias reload="source ~/.config/fish/config.fish"
 alias ppr="gh pr create"
-fish_add_path /Users/jgrau/src/pax/bin
 alias wts="wt switch"
 alias wtsm="wt switch main"
 alias wtc="wt switch --create"
+alias wtl="wt list"
 
 set -gx EDITOR nvim
 
@@ -20,5 +22,8 @@ end
 # pnpm end
 
 tv init fish | source
-
 direnv hook fish | source
+
+# Tide prompt items
+set -g tide_left_prompt_items pwd git newline character
+set -g tide_right_prompt_items status cmd_duration jobs direnv ruby time

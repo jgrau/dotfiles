@@ -19,3 +19,5 @@ external = difft
 	verbose = true
 [rerere]
 	enabled = true
+[rebase]
+	autoStash = true

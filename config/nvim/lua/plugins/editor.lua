@@ -60,6 +60,27 @@ return {
     },
   },
 
+  -- Jump between source files and their alternates, e.g. Ruby files ↔ specs with :A.
+  {
+    "tpope/vim-projectionist",
+    config = function()
+      vim.g.projectionist_heuristics = vim.tbl_deep_extend("force", vim.g.projectionist_heuristics or {}, {
+        ["apps/api/app/&apps/api/spec/"] = {
+          ["apps/api/app/*.rb"] = { alternate = "apps/api/spec/{}_spec.rb" },
+          ["apps/api/spec/*_spec.rb"] = { alternate = "apps/api/app/{}.rb" },
+          ["apps/api/lib/*.rb"] = { alternate = "apps/api/spec/lib/{}_spec.rb" },
+          ["apps/api/spec/lib/*_spec.rb"] = { alternate = "apps/api/lib/{}.rb" },
+        },
+        ["app/&spec/"] = {
+          ["app/*.rb"] = { alternate = "spec/{}_spec.rb" },
+          ["spec/*_spec.rb"] = { alternate = "app/{}.rb" },
+          ["lib/*.rb"] = { alternate = "spec/lib/{}_spec.rb" },
+          ["spec/lib/*_spec.rb"] = { alternate = "lib/{}.rb" },
+        },
+      })
+    end,
+  },
+
   -- Makes the . (repeat) command work with plugin mappings, not just native ones.
   "tpope/vim-repeat",
 

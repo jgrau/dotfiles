@@ -1,11 +1,9 @@
 # This is Git's per-user configuration file.
-[user]
-# Please adapt and uncomment the following lines:
-name = Jonas Grau
-email = jonas.grau@gmail.com
+[include]
+path = ~/.gitconfig.local
 [core]
-excludesfile = /Users/jgrau/.gitignore
-	attributesfile = /Users/jgrau/.gitattributes
+excludesfile = ~/.gitignore
+	attributesfile = ~/.gitattributes
 [pull]
 rebase = true
 [diff "rspec"]

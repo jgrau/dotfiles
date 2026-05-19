@@ -1,0 +1,11 @@
+.DS_Store
+.DS_Store?
+*.local
+*.secret
+.env
+.env.*
+!.env.example
+config/nvim/plugin/packer_compiled.lua
+config/zed/
+config/direnv/
+config/gh-dash/

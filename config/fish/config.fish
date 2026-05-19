@@ -1,4 +1,6 @@
-fish_add_path /Users/jgrau/src/pax/bin
+if test -d ~/src/pax/bin
+  fish_add_path ~/src/pax/bin
+end
 
 alias vim=nvim
 alias reload="source ~/.config/fish/config.fish"
@@ -15,7 +17,7 @@ set -gx EDITOR nvim
 functions -e !! git! gh!
 
 # pnpm
-set -gx PNPM_HOME "/Users/jgrau/Library/pnpm"
+set -gx PNPM_HOME "$HOME/Library/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end

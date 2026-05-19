@@ -1,7 +1,0 @@
-[whitelist]
-exact = ["~/src/landfolk", "~/src/pax"]
-prefix = ["~/src/landfolk.", "~/src/pax."]
-
-
-[global]
-hide_env_diff = true

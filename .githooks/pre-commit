@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --redact --staged --pre-commit --verbose
+elif command -v nix >/dev/null 2>&1; then
+  nix run nixpkgs#gitleaks -- git --redact --staged --pre-commit --verbose
+else
+  echo "gitleaks is required for pre-commit secret scanning." >&2
+  echo "Install it with Homebrew or Nix, then retry the commit." >&2
+  exit 1
+fi

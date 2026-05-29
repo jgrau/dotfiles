@@ -8,11 +8,29 @@ autocmd("FileType", {
   command = "nnoremap <buffer> q <cmd>quit<cr>",
 })
 
--- Text width for prose files
+local prose_filetypes = { "text", "markdown", "gitcommit" }
+
+local function use_builtin_text_wrapping()
+  vim.opt_local.textwidth = 80
+  vim.opt_local.formatexpr = ""
+  vim.opt_local.formatprg = ""
+end
+
+-- Text width for prose files. Clear formatter hooks so visual `gq` uses
+-- Vim's built-in wrapping instead of LSP/formatprg formatting.
 autocmd("FileType", {
   group = augroup,
-  pattern = { "text", "markdown" },
-  command = "setlocal textwidth=80",
+  pattern = prose_filetypes,
+  callback = use_builtin_text_wrapping,
+})
+
+autocmd("LspAttach", {
+  group = augroup,
+  callback = function()
+    if vim.tbl_contains(prose_filetypes, vim.bo.filetype) then
+      use_builtin_text_wrapping()
+    end
+  end,
 })
 
 -- console.log shortcut for JS/TS

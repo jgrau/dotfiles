@@ -272,7 +272,7 @@ post-start = [
 ]
 
 [projects."github.com/landfolk/landfolk"]
-pre-start.direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow ."
+pre-start.direnv = "command -v direnv >/dev/null 2>&1 && [ -f .envrc ] && direnv allow . && cd apps/api && direnv allow ."
 
 [commit.generation]
 command = """codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - | jq -sr '[.[] | select(.item.type? == "agent_message")] | last.item.text'"""

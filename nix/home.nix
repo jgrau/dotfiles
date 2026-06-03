@@ -24,7 +24,6 @@
     jq
     nerd-fonts.meslo-lg
     neovim
-    raycast
     ripgrep
     tealdeer
     television

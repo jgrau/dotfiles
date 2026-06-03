@@ -12,7 +12,6 @@
     _1password-cli
     ack
     act
-    brave
     difftastic
     direnv
     fd

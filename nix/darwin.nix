@@ -15,7 +15,6 @@
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "1password-cli"
-    "brave"
   ];
 
   nix.settings = {
@@ -41,8 +40,12 @@
     };
     brews = [ ];
     casks = [
+      "1password"
+      "brave-browser"
+      "google-chrome"
       "mimestream"
       "raycast"
+      "slack"
     ];
   };
 

@@ -3,8 +3,23 @@ return {
   "AndrewRadev/switch.vim",
 
   -- Navigate seamlessly between Neovim splits and tmux panes using <C-hjkl>.
-  -- Keybindings are defined in config/keymaps.lua.
-  "christoomey/vim-tmux-navigator",
+  -- Load on the TmuxNavigate* commands so the plugin (and its <C-hjkl>
+  -- mappings) is available when those keys are pressed.
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+    },
+    keys = {
+      { "<C-h>", "<cmd>TmuxNavigateLeft<cr>" },
+      { "<C-j>", "<cmd>TmuxNavigateDown<cr>" },
+      { "<C-k>", "<cmd>TmuxNavigateUp<cr>" },
+      { "<C-l>", "<cmd>TmuxNavigateRight<cr>" },
+    },
+  },
 
   -- Distraction-free writing mode. :Goyo to toggle.
   "junegunn/goyo.vim",

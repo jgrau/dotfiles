@@ -12,11 +12,10 @@ bind("n", "<Up>",    function() printError("Use k") end)
 bind("n", "<Down>",  function() printError("Use j") end)
 
 -- Navigate between Neovim splits and tmux panes with the same keys.
+-- The <C-hjkl> mappings and lazy-loading live in the plugin spec
+-- (lua/plugins/editor.lua). Disable the plugin's own default maps so
+-- only our explicit ones apply.
 vim.g.tmux_navigator_no_mappings = 1
-bind("n", "<C-h>", ":TmuxNavigateLeft<cr>",  opts)
-bind("n", "<C-j>", ":TmuxNavigateDown<cr>",  opts)
-bind("n", "<C-k>", ":TmuxNavigateUp<cr>",    opts)
-bind("n", "<C-l>", ":TmuxNavigateRight<cr>", opts)
 
 -- Stay in visual mode after indenting a selection
 bind("v", "<", "<gv")

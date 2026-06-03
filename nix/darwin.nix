@@ -46,8 +46,14 @@
       "mimestream"
       "raycast"
       "slack"
+      "telegram"
     ];
   };
+
+  # Allow authenticating sudo (e.g. `drs`) with Touch ID / Apple Watch
+  # instead of typing the password. Managed declaratively so it survives
+  # macOS updates that would otherwise reset /etc/pam.d/sudo.
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   system.defaults.dock.autohide = true;
 

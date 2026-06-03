@@ -8,5 +8,6 @@ result
 !.env.example
 config/nvim/plugin/packer_compiled.lua
 config/zed/
+.pi/
 config/direnv/
 config/gh-dash/

@@ -1,14 +1,26 @@
 # Dotfiles
 
-Personal dotfiles managed with [rcm](https://github.com/thoughtbot/rcm).
+Personal macOS dotfiles managed with [nix-darwin](https://github.com/nix-darwin/nix-darwin) and [Home Manager](https://github.com/nix-community/home-manager).
+
+The old rcm/Homebrew files are kept as migration reference while the Nix setup becomes the source of truth.
 
 ## Install
 
 ```sh
-rcup
+sudo darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro
 ```
 
-Review the files before applying them on a new machine. Some tools assume macOS and Homebrew.
+The first activation may back up existing Home Manager-managed files with the `.hm-backup` suffix.
+
+## Validate
+
+```sh
+nix flake check
+
+darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro
+```
+
+Review the files before applying them on a new machine. Some tools assume macOS.
 
 ## Local-only configuration
 

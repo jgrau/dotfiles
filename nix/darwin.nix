@@ -12,6 +12,10 @@
     shell = pkgs.fish;
   };
 
+  networking.hostName = "Jonass-MacBook-Pro";       # scutil --set HostName
+  networking.localHostName = "Jonass-MacBook-Pro";  # scutil --set LocalHostName (Bonjour .local)
+  networking.computerName = "Jonas’s MacBook Pro";   # scutil --set ComputerName (Finder/UI name)
+
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "1password-cli"
@@ -43,10 +47,12 @@
       "1password"
       "brave-browser"
       "google-chrome"
+      "lens"
       "linear"
       "mimestream"
       "raycast"
       "slack"
+      "spotify"
       "telegram"
     ];
   };

@@ -43,6 +43,7 @@
       "1password"
       "brave-browser"
       "google-chrome"
+      "linear"
       "mimestream"
       "raycast"
       "slack"

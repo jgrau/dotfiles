@@ -14,10 +14,12 @@
     act
     difftastic
     direnv
+    doctl
     fd
     fzf
     gh
     gitleaks
+    go-task
     graphviz
     imagemagick
     jq
@@ -67,6 +69,7 @@
     ];
     settings = {
       user.name = "Jonas Grau";
+      user.email = "jonas.grau@gmail.com";
       core = {
         excludesfile = "~/.gitignore";
         attributesfile = "~/.gitattributes";
@@ -90,9 +93,35 @@
       { name = "autopair"; src = autopair-fish.src; }
       { name = "done"; src = done.src; }
       { name = "fzf.fish"; src = fzf-fish.src; }
-      { name = "fish-git-abbr"; src = git-abbr.src; }
+      {
+        name = "plugin-git";
+        src = pkgs.fetchFromGitHub {
+          owner = "jhillyerd";
+          repo = "plugin-git";
+          rev = "dd1f559c01cde4cf0d16581b60e20d29f33c0665";
+          sha256 = "sha256-ByEqv5mZ6S9K+Pkpf1Dybwfqh3x++3AhXaMtw0I3wDo=";
+        };
+      }
+      {
+        name = "fish-abbreviation-tips";
+        src = pkgs.fetchFromGitHub {
+          owner = "gazorby";
+          repo = "fish-abbreviation-tips";
+          rev = "8ed76a62bb044ba4ad8e3e6832640178880df485";
+          sha256 = "sha256-F1t81VliD+v6WEWqj1c1ehFBXzqLyumx5vV46s/FZRU=";
+        };
+      }
       { name = "puffer"; src = puffer.src; }
       { name = "tide"; src = tide.src; }
+      {
+        name = "tmux";
+        src = pkgs.fetchFromGitHub {
+          owner = "budimanjojo";
+          repo = "tmux.fish";
+          rev = "db0030b7f4f78af4053dc5c032c7512406961ea5";
+          sha256 = "sha256-rRibn+FN8VNTSC1HmV05DXEa6+3uOHNx03tprkcjjs8=";
+        };
+      }
     ];
     interactiveShellInit = ''
       if test -d ~/src/pax/bin

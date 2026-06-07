@@ -65,10 +65,12 @@
   system.defaults.dock.autohide = true;
 
   system.defaults.NSGlobalDomain = {
-    # Lower values are faster; these are the fastest macOS accepts
-    # (below what the Settings slider exposes).
-    InitialKeyRepeat = 10;
-    KeyRepeat = 1;
+    # Lower values are faster. Both were near the fastest macOS accepts,
+    # causing duplicate characters. InitialKeyRepeat (delay before repeat
+    # starts) bumped 10->15 and KeyRepeat (repeat rate) bumped 1->2 to give
+    # a longer grace period and slower repeat while staying responsive.
+    InitialKeyRepeat = 15;
+    KeyRepeat = 2;
   };
 
   # Mouse tracking speed (System Settings > Mouse > Tracking speed).

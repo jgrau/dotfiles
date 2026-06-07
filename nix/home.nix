@@ -70,6 +70,7 @@ in
     jq
     nerd-fonts.meslo-lg
     neovim
+    nodejs   # provides npm, used by `pi install` to fetch pi packages
     ripgrep
     tealdeer
     television

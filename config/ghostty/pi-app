@@ -1,0 +1,16 @@
+# Dedicated Ghostty config for running pi as a standalone "app" window.
+# Loaded via `ghostty --config-file=...` from the Pi.app launcher.
+# Inherits nothing from the default config, so set the look explicitly here.
+
+font-family = MesloLGS Nerd Font Mono
+font-size = 14
+window-padding-x = 8
+window-padding-y = 8
+
+# App-like single window: hide tab/title chrome, no quit confirmation.
+macos-titlebar-style = hidden
+window-decoration = auto
+confirm-close-surface = false
+
+# Launch straight into pi and keep the window; closing pi closes the window.
+command = pi

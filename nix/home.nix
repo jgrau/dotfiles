@@ -1,5 +1,39 @@
 { pkgs, lib, ... }:
 
+let
+  # "Terminal as app": a tiny .app bundle that opens a dedicated Ghostty
+  # window running pi, using the pi-app config in ~/.config/ghostty/pi-app.
+  piApp = pkgs.runCommand "pi-app" { } ''
+    APP="$out/Applications/Pi.app"
+    mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+
+    cat > "$APP/Contents/Info.plist" <<'PLIST'
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>CFBundleName</key><string>Pi</string>
+      <key>CFBundleDisplayName</key><string>Pi</string>
+      <key>CFBundleIdentifier</key><string>dev.pi.app.launcher</string>
+      <key>CFBundleVersion</key><string>1</string>
+      <key>CFBundleShortVersionString</key><string>1</string>
+      <key>CFBundlePackageType</key><string>APPL</string>
+      <key>CFBundleExecutable</key><string>pi-launcher</string>
+      <key>LSMinimumSystemVersion</key><string>11.0</string>
+      <key>NSHighResolutionCapable</key><true/>
+    </dict>
+    </plist>
+    PLIST
+
+    cat > "$APP/Contents/MacOS/pi-launcher" <<'LAUNCH'
+    #!/bin/sh
+    exec "$HOME/Applications/Home Manager Apps/Ghostty.app/Contents/MacOS/ghostty" \
+      --config-default-files=false \
+      --config-file="$HOME/.config/ghostty/pi-app"
+    LAUNCH
+    chmod +x "$APP/Contents/MacOS/pi-launcher"
+  '';
+in
 {
   home.username = "jgrau";
   home.homeDirectory = "/Users/jgrau";
@@ -60,6 +94,13 @@
       window-padding-x = 8;
       window-padding-y = 8;
     };
+  };
+
+  # Dedicated Ghostty config + .app bundle that run pi as a standalone app.
+  # (ghostty/pi-app config file is added in the xdg.configFile block below.)
+  home.file."Applications/Pi.app" = {
+    source = "${piApp}/Applications/Pi.app";
+    recursive = true;
   };
 
   programs.git = {
@@ -242,10 +283,13 @@
     nvimFiles = lib.filterAttrs
       (name: _: name != "lazy-lock.json")
       (builtins.readDir nvimSrc);
-  in lib.mapAttrs'
-    (name: _: lib.nameValuePair "nvim/${name}" {
-      source = nvimSrc + "/${name}";
-      recursive = true;
-    })
-    nvimFiles;
+    nvimConfig = lib.mapAttrs'
+      (name: _: lib.nameValuePair "nvim/${name}" {
+        source = nvimSrc + "/${name}";
+        recursive = true;
+      })
+      nvimFiles;
+  in nvimConfig // {
+    "ghostty/pi-app".source = ../config/ghostty/pi-app;
+  };
 }

@@ -12,5 +12,11 @@ macos-titlebar-style = hidden
 window-decoration = auto
 confirm-close-surface = false
 
+# Branding: show "pi" as the window/app title and use the custom pi Dock icon
+# (overrides Ghostty's ghost icon for this instance).
+title = pi
+macos-icon = custom-style
+macos-custom-icon = ~/.config/ghostty/pi.icns
+
 # The command to run (pi) is passed via `-e` from the Pi.app launcher with an
 # absolute path, since the login shell Ghostty spawns has a minimal PATH.

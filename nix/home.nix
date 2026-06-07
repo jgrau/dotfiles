@@ -4,16 +4,19 @@ let
   # "Terminal as app": a tiny .app bundle that opens a dedicated Ghostty
   # window running pi, using the pi-app config in ~/.config/ghostty/pi-app.
   piApp = pkgs.runCommand "pi-app" { } ''
-    APP="$out/Applications/Pi.app"
+    APP="$out/Applications/pi.app"
     mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+
+    cp ${../config/ghostty/pi.icns} "$APP/Contents/Resources/pi.icns"
 
     cat > "$APP/Contents/Info.plist" <<'PLIST'
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
     <dict>
-      <key>CFBundleName</key><string>Pi</string>
-      <key>CFBundleDisplayName</key><string>Pi</string>
+      <key>CFBundleName</key><string>pi</string>
+      <key>CFBundleDisplayName</key><string>pi</string>
+      <key>CFBundleIconFile</key><string>pi</string>
       <key>CFBundleIdentifier</key><string>dev.pi.app.launcher</string>
       <key>CFBundleVersion</key><string>1</string>
       <key>CFBundleShortVersionString</key><string>1</string>
@@ -106,8 +109,8 @@ in
 
   # Dedicated Ghostty config + .app bundle that run pi as a standalone app.
   # (ghostty/pi-app config file is added in the xdg.configFile block below.)
-  home.file."Applications/Pi.app" = {
-    source = "${piApp}/Applications/Pi.app";
+  home.file."Applications/pi.app" = {
+    source = "${piApp}/Applications/pi.app";
     recursive = true;
   };
 
@@ -299,5 +302,6 @@ in
       nvimFiles;
   in nvimConfig // {
     "ghostty/pi-app".source = ../config/ghostty/pi-app;
+    "ghostty/pi.icns".source = ../config/ghostty/pi.icns;
   };
 }

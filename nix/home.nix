@@ -30,9 +30,14 @@ let
 
     cat > "$APP/Contents/MacOS/pi-launcher" <<'LAUNCH'
     #!/bin/sh
-    exec "$HOME/Applications/Home Manager Apps/Ghostty.app/Contents/MacOS/ghostty" \
+    # macOS does not support launching the Ghostty emulator directly from the
+    # CLI (only +actions), so use `open -na`. Resolve pi via the stable
+    # nix-profile symlink (survives upgrades) with an absolute path, because
+    # the login shell Ghostty spawns has a minimal PATH without ~/.nix-profile.
+    exec /usr/bin/open -na "$HOME/Applications/Home Manager Apps/Ghostty.app" --args \
       --config-default-files=false \
-      --config-file="$HOME/.config/ghostty/pi-app"
+      --config-file="$HOME/.config/ghostty/pi-app" \
+      -e "$HOME/.nix-profile/bin/pi"
     LAUNCH
     chmod +x "$APP/Contents/MacOS/pi-launcher"
   '';

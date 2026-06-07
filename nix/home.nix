@@ -21,6 +21,9 @@ let
       <key>CFBundleExecutable</key><string>pi-launcher</string>
       <key>LSMinimumSystemVersion</key><string>11.0</string>
       <key>NSHighResolutionCapable</key><true/>
+      <key>LSRequiresNativeExecution</key><true/>
+      <key>LSArchitecturePriority</key>
+      <array><string>arm64</string></array>
     </dict>
     </plist>
     PLIST

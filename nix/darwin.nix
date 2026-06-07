@@ -50,6 +50,7 @@
       "lens"
       "linear"
       "mimestream"
+      "notion"
       "raycast"
       "slack"
       "spotify"

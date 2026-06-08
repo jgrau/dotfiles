@@ -220,6 +220,11 @@ in
         tv init fish | source
       end
 
+      # worktrunk shell integration (lets `wt switch` change the shell's CWD)
+      if command -q wt
+        wt config shell init fish | source
+      end
+
       # Tide prompt items
       set -g tide_cmd_duration_threshold 3000
       set -g tide_cmd_duration_decimals 0

@@ -42,7 +42,9 @@
       cleanup = "zap"; # remove anything not listed below
       upgrade = true;
     };
-    brews = [ ];
+    brews = [
+      "worktrunk"  # `wt` — Git worktree management for parallel AI agent workflows
+    ];
     casks = [
       "1password"
       "brave-browser"

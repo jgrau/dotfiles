@@ -107,8 +107,10 @@ in
       window-padding-y = 8;
 
       # Quick terminal (Quake-style dropdown), centered on screen.
-      keybind = "global:alt+shift+grave_accent=toggle_quick_terminal";
+      keybind = "global:alt+tab=toggle_quick_terminal";
       quick-terminal-position = "center";
+      # Make the centered quick terminal take ~75% of the screen.
+      quick-terminal-size = "75%,75%";
     };
   };
 

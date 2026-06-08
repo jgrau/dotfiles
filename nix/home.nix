@@ -129,6 +129,10 @@ in
       window-padding-x = 8;
       window-padding-y = 8;
 
+      # Animated trailing cursor (smear effect). Reloadable at runtime
+      # (cmd+shift+,). Trail color follows `cursor-color`.
+      custom-shader = "shaders/cursor_smear.glsl";
+
       # Quick terminal (Quake-style dropdown), centered on screen.
       keybind = "global:alt+tab=toggle_quick_terminal";
       quick-terminal-position = "center";
@@ -337,6 +341,7 @@ in
       nvimFiles;
   in nvimConfig // {
     "ghostty/pi-app".source = ../config/ghostty/pi-app;
+    "ghostty/shaders/cursor_smear.glsl".source = ../config/ghostty/shaders/cursor_smear.glsl;
     "ghostty/pi.icns".source = ../config/ghostty/pi.icns;
   };
 }

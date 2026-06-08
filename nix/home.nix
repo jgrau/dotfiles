@@ -60,6 +60,7 @@ in
     difftastic
     direnv
     doctl
+    duti  # set default macOS handlers (e.g. Ghostty for shell scripts)
     fd
     fzf
     gh
@@ -93,6 +94,28 @@ in
     enableFishIntegration = true;
     enableZshIntegration = true;
   };
+
+  # Make Ghostty the default app for shell-script file types (the closest macOS
+  # equivalent to a "default terminal"). Re-applied on every activation; duti is
+  # idempotent. macOS has no setting for the Finder "Open in Terminal" button —
+  # Apple hardcodes that to Terminal.app — so this covers .sh/.command/etc.
+  home.activation.ghosttyDefaultHandler =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      DUTI="${pkgs.duti}/bin/duti"
+      GHOSTTY_ID="com.mitchellh.ghostty"
+      for uti in \
+        public.shell-script \
+        public.unix-executable \
+        com.apple.terminal.shell-script \
+        public.zsh-script \
+        public.csh-script \
+        public.perl-script; do
+        run "$DUTI" -s "$GHOSTTY_ID" "$uti" all || true
+      done
+      for ext in sh command tool terminal; do
+        run "$DUTI" -s "$GHOSTTY_ID" ".$ext" all || true
+      done
+    '';
 
   programs.ghostty = {
     enable = true;

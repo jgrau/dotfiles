@@ -105,6 +105,10 @@ in
       macos-titlebar-style = "tabs";
       window-padding-x = 8;
       window-padding-y = 8;
+
+      # Quick terminal (Quake-style dropdown), centered on screen.
+      keybind = "global:alt+shift+grave_accent=toggle_quick_terminal";
+      quick-terminal-position = "center";
     };
   };
 

@@ -57,6 +57,7 @@ in
     _1password-cli
     ack
     act
+    caprine  # standalone Facebook Messenger desktop app
     difftastic
     direnv
     doctl
@@ -145,6 +146,14 @@ in
   # (ghostty/pi-app config file is added in the xdg.configFile block below.)
   home.file."Applications/pi.app" = {
     source = "${piApp}/Applications/pi.app";
+    recursive = true;
+  };
+
+  # Surface Caprine (standalone Messenger app) in ~/Applications so Spotlight
+  # finds it. The home-manager-applications aggregator doesn't pick up
+  # Caprine's bundle, so link it directly from the package output.
+  home.file."Applications/Caprine.app" = {
+    source = "${pkgs.caprine}/Applications/Caprine.app";
     recursive = true;
   };
 

@@ -150,14 +150,6 @@ in
     recursive = true;
   };
 
-  # Surface Caprine (standalone Messenger app) in ~/Applications so Spotlight
-  # finds it. The home-manager-applications aggregator doesn't pick up
-  # Caprine's bundle, so link it directly from the package output.
-  home.file."Applications/Caprine.app" = {
-    source = "${pkgs.caprine}/Applications/Caprine.app";
-    recursive = true;
-  };
-
   programs.git = {
     enable = true;
     includes = [

@@ -275,6 +275,20 @@ in
     '';
   };
 
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    shellAliases = {
+      drb = "darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro";
+      drs = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro";
+      g = "git";
+      ll = "ls -lah";
+    };
+    initExtra = ''
+      eval "$(zoxide init bash)"
+    '';
+  };
+
   programs.tmux = {
     enable = true;
     prefix = "C-f";

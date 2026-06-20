@@ -137,8 +137,9 @@ in
       # Quick terminal (Quake-style dropdown), centered on screen.
       keybind = "global:alt+tab=toggle_quick_terminal";
       quick-terminal-position = "center";
-      # Make the centered quick terminal take ~75% of the screen.
-      quick-terminal-size = "75%,75%";
+      # ~60% of the screen so it also fits comfortably on the laptop
+      # display when the external monitor is unplugged.
+      quick-terminal-size = "60%,60%";
     };
   };
 

@@ -113,7 +113,9 @@ in
         public.perl-script; do
         run "$DUTI" -s "$GHOSTTY_ID" "$uti" all || true
       done
-      for ext in sh command tool terminal; do
+      # Note: no `.terminal` — that extension is Terminal.app profile plists,
+      # not a shell script, and has no registered UTI (duti errors with -50).
+      for ext in sh command tool; do
         run "$DUTI" -s "$GHOSTTY_ID" ".$ext" all || true
       done
     '';

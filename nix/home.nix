@@ -44,6 +44,18 @@ let
     LAUNCH
     chmod +x "$APP/Contents/MacOS/pi-launcher"
   '';
+
+  # Caprine's bundled Electron 41.6.1 crashes on sign-in on macOS 26 (Tahoe)
+  # — an upstream V8/MAP_JIT bug (electron/electron#49522). JIT-disabling
+  # flags don't reach the crashing process, so rebuild against a newer,
+  # non-EOL Electron (42) that includes the fix.
+  #
+  # NB: do NOT rename/modify or re-sign this bundle. macOS 26 only grants the
+  # implicit JIT permission to the pristine ad-hoc linker-signed bundle; any
+  # renamed/re-signed copy loses that grant and re-triggers the crash. (We
+  # tried surfacing it as "Messenger" via both a renamed bundle and a separate
+  # launcher .app — macOS 26 blocks both — so it stays branded "Caprine".)
+  caprineApp = pkgs.caprine.override { electron = pkgs.electron_42; };
 in
 {
   home.username = "jgrau";
@@ -57,7 +69,7 @@ in
     _1password-cli
     ack
     act
-    caprine  # standalone Facebook Messenger desktop app
+    caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
     difftastic
     direnv
     doctl
@@ -151,6 +163,7 @@ in
     source = "${piApp}/Applications/pi.app";
     recursive = true;
   };
+
 
   programs.git = {
     enable = true;

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   # "Terminal as app": a tiny .app bundle that opens a dedicated Ghostty
@@ -164,6 +164,21 @@ in
     recursive = true;
   };
 
+
+  imports = [ inputs.hunk.homeManagerModules.default ];
+
+  # hunk: review-first terminal diff viewer. enableGitIntegration sets it as
+  # the git pager (core.pager = "hunk pager"); it does not touch diff.external
+  # (difftastic), so the two coexist.
+  programs.hunk = {
+    enable = true;
+    enableGitIntegration = true;
+    settings = {
+      theme = "auto";
+      mode = "auto";
+      line_numbers = true;
+    };
+  };
 
   programs.git = {
     enable = true;

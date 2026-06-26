@@ -1,6 +1,14 @@
-{ self, lib, pkgs, ... }:
+{ self, lib, pkgs, inputs, ... }:
 
 {
+  # Pin Neovim to the unstable channel for a newer release than 25.11 ships.
+  nixpkgs.overlays = [
+    (final: prev: {
+      neovim = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.neovim;
+      neovim-unwrapped = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.neovim-unwrapped;
+    })
+  ];
+
   system.primaryUser = "jgrau";
 
   users.knownUsers = [ "jgrau" ];

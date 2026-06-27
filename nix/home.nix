@@ -100,6 +100,20 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+    config = {
+      hide_env_diff = true;
+      # Auto-trust .envrc in landfolk worktrees (siblings named landfolk.<branch>)
+      # so newly-created worktrees load without a manual `direnv allow`. The
+      # trailing dot keeps this from also matching landfolk-api-* etc.; the main
+      # repo is whitelisted by its exact .envrc path.
+      whitelist.prefix = [
+        "/Users/jgrau/src/worktrees"
+        "/Users/jgrau/src/landfolk."
+      ];
+      whitelist.exact = [
+        "/Users/jgrau/src/landfolk/.envrc"
+      ];
+    };
   };
 
   programs.zoxide = {
@@ -193,6 +207,10 @@ in
         attributesfile = "~/.gitattributes";
       };
       pull.rebase = true;
+      # hunk (core.pager) intercepts diff/show output for its TUI, but plain
+      # `git log` produces no diff and hangs in hunk's pager. Route `git log`
+      # through less instead. Note: this also applies to `git log -p`.
+      pager.log = "less -FRX";
       diff = {
         external = "difft";
         algorithm = "histogram";
@@ -368,16 +386,17 @@ in
   home.file.".gemrc".source = ../gemrc;
   home.file.".tigrc".source = ../tigrc;
 
-  # Deploy the Neovim (lazy.nvim) config from the repo into ~/.config/nvim.
+  # Deploy the Neovim (vim.pack) config from the repo into ~/.config/nvim.
   # We link individual files (recursive) rather than the whole dir, and
-  # deliberately EXCLUDE lazy-lock.json: lazy.nvim needs to write that file
-  # at runtime, but anything linked from the Nix store is read-only. Leaving
-  # it out lets lazy own a normal, writable lockfile in ~/.config/nvim.
+  # deliberately EXCLUDE nvim-pack-lock.json: vim.pack needs to write that
+  # file at runtime, but anything linked from the Nix store is read-only.
+  # Leaving it out lets vim.pack own a normal, writable lockfile in
+  # ~/.config/nvim.
   xdg.configFile = let
     nvimSrc = ../config/nvim;
-    # All files under config/nvim except the lazy lockfile.
+    # All files under config/nvim except the vim.pack lockfile.
     nvimFiles = lib.filterAttrs
-      (name: _: name != "lazy-lock.json")
+      (name: _: name != "nvim-pack-lock.json")
       (builtins.readDir nvimSrc);
     nvimConfig = lib.mapAttrs'
       (name: _: lib.nameValuePair "nvim/${name}" {

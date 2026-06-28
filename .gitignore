@@ -6,7 +6,6 @@ result
 .env
 .env.*
 !.env.example
-config/nvim/plugin/packer_compiled.lua
 config/zed/
 .pi/
 config/direnv/

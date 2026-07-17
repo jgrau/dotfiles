@@ -59,6 +59,7 @@
       "1password"
       "brave-browser"
       "google-chrome"
+      "iina"
       "lens"
       "linear"
       "mimestream"

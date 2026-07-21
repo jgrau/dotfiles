@@ -56,6 +56,21 @@ let
   # tried surfacing it as "Messenger" via both a renamed bundle and a separate
   # launcher .app — macOS 26 blocks both — so it stays branded "Caprine".)
   caprineApp = pkgs.caprine.override { electron = pkgs.electron_42; };
+
+  # TomatoBar: menu bar pomodoro timer. The Homebrew cask is deprecated (fails
+  # Gatekeeper) and the upstream build is only ad-hoc signed ("CI Code Signing",
+  # no Team ID / notarization), so we fetch the release zip directly, pin it by
+  # hash, and strip the quarantine xattr in a home.activation step below.
+  tomatobarApp = pkgs.runCommand "tomatobar-3.6.1" {
+    src = pkgs.fetchurl {
+      url = "https://github.com/ivoronin/TomatoBar/releases/download/v3.6.1/TomatoBar-v3.6.1.zip";
+      hash = "sha256-iA0fS0R0k1/KVyP/vaCZU3ZxbYvJTkmf9aVMvHub5wI=";
+    };
+    nativeBuildInputs = [ pkgs.unzip ];
+  } ''
+    mkdir -p "$out/Applications"
+    unzip -q "$src" -d "$out/Applications"
+  '';
 in
 {
   home.username = "jgrau";
@@ -177,6 +192,21 @@ in
     source = "${piApp}/Applications/pi.app";
     recursive = true;
   };
+
+  # TomatoBar menu bar pomodoro timer (see tomatobarApp in the let block).
+  home.file."Applications/TomatoBar.app" = {
+    source = "${tomatobarApp}/Applications/TomatoBar.app";
+    recursive = true;
+  };
+
+  # The Nix-store copy of TomatoBar can carry the com.apple.quarantine xattr,
+  # and the app is only ad-hoc signed, so Gatekeeper blocks it. Strip the
+  # attribute from the linked bundle on every activation.
+  home.activation.dequarantineTomatoBar =
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      run /usr/bin/xattr -dr com.apple.quarantine \
+        "$HOME/Applications/TomatoBar.app" 2>/dev/null || true
+    '';
 
 
   imports = [ inputs.hunk.homeManagerModules.default ];

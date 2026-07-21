@@ -69,6 +69,8 @@
       "spotify"
       "telegram"
     ];
+    # NOTE: TomatoBar's cask is deprecated (fails Gatekeeper); it's installed
+    # declaratively from the GitHub release in nix/home.nix instead.
   };
 
   # Allow authenticating sudo (e.g. `drs`) with Touch ID / Apple Watch

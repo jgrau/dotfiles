@@ -59,6 +59,7 @@
       "1password"
       "brave-browser"
       "google-chrome"
+      "handy"       # local speech-to-text app (https://handy.computer)
       "iina"
       "lens"
       "linear"

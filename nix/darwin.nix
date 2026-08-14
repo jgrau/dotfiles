@@ -68,6 +68,7 @@
       "raycast"
       "slack"
       "spotify"
+      "tailscale-app"  # official Tailscale GUI + menu bar app
       "telegram"
     ];
     # NOTE: TomatoBar's cask is deprecated (fails Gatekeeper); it's installed

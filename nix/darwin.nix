@@ -82,6 +82,9 @@
 
   system.defaults.dock.autohide = true;
 
+  # Save screenshots to ~/Screenshots instead of the Desktop.
+  system.defaults.screencapture.location = "/Users/jgrau/Screenshots";
+
   system.defaults.NSGlobalDomain = {
     # Lower values are faster. Both were near the fastest macOS accepts,
     # causing duplicate characters. InitialKeyRepeat (delay before repeat

@@ -1,50 +1,6 @@
 { pkgs, lib, inputs, ... }:
 
 let
-  # "Terminal as app": a tiny .app bundle that opens a dedicated Ghostty
-  # window running pi, using the pi-app config in ~/.config/ghostty/pi-app.
-  piApp = pkgs.runCommand "pi-app" { } ''
-    APP="$out/Applications/pi.app"
-    mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-
-    cp ${../config/ghostty/pi.icns} "$APP/Contents/Resources/pi.icns"
-
-    cat > "$APP/Contents/Info.plist" <<'PLIST'
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>CFBundleName</key><string>pi</string>
-      <key>CFBundleDisplayName</key><string>pi</string>
-      <key>CFBundleIconFile</key><string>pi</string>
-      <key>CFBundleIdentifier</key><string>dev.pi.app.launcher</string>
-      <key>CFBundleVersion</key><string>1</string>
-      <key>CFBundleShortVersionString</key><string>1</string>
-      <key>CFBundlePackageType</key><string>APPL</string>
-      <key>CFBundleExecutable</key><string>pi-launcher</string>
-      <key>LSMinimumSystemVersion</key><string>11.0</string>
-      <key>NSHighResolutionCapable</key><true/>
-      <key>LSRequiresNativeExecution</key><true/>
-      <key>LSArchitecturePriority</key>
-      <array><string>arm64</string></array>
-    </dict>
-    </plist>
-    PLIST
-
-    cat > "$APP/Contents/MacOS/pi-launcher" <<'LAUNCH'
-    #!/bin/sh
-    # macOS does not support launching the Ghostty emulator directly from the
-    # CLI (only +actions), so use `open -na`. Resolve pi via the stable
-    # nix-profile symlink (survives upgrades) with an absolute path, because
-    # the login shell Ghostty spawns has a minimal PATH without ~/.nix-profile.
-    exec /usr/bin/open -na "$HOME/Applications/Home Manager Apps/Ghostty.app" --args \
-      --config-default-files=false \
-      --config-file="$HOME/.config/ghostty/pi-app" \
-      -e "$HOME/.nix-profile/bin/pi"
-    LAUNCH
-    chmod +x "$APP/Contents/MacOS/pi-launcher"
-  '';
-
   # Caprine's bundled Electron 41.6.1 crashes on sign-in on macOS 26 (Tahoe)
   # — an upstream V8/MAP_JIT bug (electron/electron#49522). JIT-disabling
   # flags don't reach the crashing process, so rebuild against a newer,
@@ -100,6 +56,7 @@ in
     nerd-fonts.meslo-lg
     neovim
     nodejs   # provides npm, used by `pi install` to fetch pi packages
+    inputs.llm-agents.packages.${pkgs.system}.pi  # pi coding agent
     ripgrep
     tealdeer
     television
@@ -184,13 +141,6 @@ in
       # display when the external monitor is unplugged.
       quick-terminal-size = "60%,60%";
     };
-  };
-
-  # Dedicated Ghostty config + .app bundle that run pi as a standalone app.
-  # (ghostty/pi-app config file is added in the xdg.configFile block below.)
-  home.file."Applications/pi.app" = {
-    source = "${piApp}/Applications/pi.app";
-    recursive = true;
   };
 
   # TomatoBar menu bar pomodoro timer (see tomatobarApp in the let block).
@@ -378,6 +328,7 @@ in
       yank
       pain-control
       vim-tmux-navigator
+      resurrect
       {
         plugin = catppuccin;
         extraConfig = ''
@@ -391,12 +342,6 @@ in
         extraConfig = ''
           set -g @fzf-url-bind "u"
           set -g @fzf-url-history-limit "2000"
-        '';
-      }
-      {
-        plugin = resurrect;
-        extraConfig = ''
-          set -g @resurrect-processes 'vi vim nvim ssh psql mysql irb pry rails console node pnpm npm yarn make task "~bin/pax" "~bin/pax interactive" "~bin/pax-task" "~pi"'
         '';
       }
       {

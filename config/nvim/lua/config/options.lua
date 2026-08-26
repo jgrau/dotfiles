@@ -25,8 +25,8 @@ set.shiftwidth = 2   -- how wide >> / << indents
 set.softtabstop = 2  -- how wide Tab key feels in insert mode
 set.expandtab = true -- insert spaces instead of \t
 
--- Don't wrap long lines
-set.wrap = false
+-- Wrap long lines at the window edge
+set.wrap = true
 
 -- Show invisible characters (tabs and trailing spaces)
 set.list = true

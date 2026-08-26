@@ -18,6 +18,9 @@
     # hunk: review-first terminal diff viewer (git difftool/pager)
     hunk.url = "github:modem-dev/hunk";
     hunk.inputs.nixpkgs.follows = "nixpkgs";
+
+    # pi: the pi coding agent. Provides packages.<system>.pi.
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = inputs@{ self, nix-darwin, home-manager, nix-homebrew, ... }: {

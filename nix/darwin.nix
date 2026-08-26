@@ -68,8 +68,10 @@
       "raycast"
       "slack"
       "spotify"
+      "steam"
       "tailscale-app"  # official Tailscale GUI + menu bar app
       "telegram"
+      "transmit"       # Panic's Transmit — FTP/SFTP/cloud file transfer client
     ];
     # NOTE: TomatoBar's cask is deprecated (fails Gatekeeper); it's installed
     # declaratively from the GitHub release in nix/home.nix instead.

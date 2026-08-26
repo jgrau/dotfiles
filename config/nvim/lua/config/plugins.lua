@@ -161,7 +161,7 @@ end
 
 -- ─── pax-nvim (local extension, optional) ───────────────────────────────────
 do
-  local pax_nvim = vim.fn.expand("~/src/pax/src/.pi/extensions/pax-nvim/nvim")
+  local pax_nvim = vim.fn.expand("~/src/pax/packages/pi-resources/extensions/pax-nvim/nvim")
   if vim.fn.isdirectory(pax_nvim) == 1 then
     -- Make the local plugin available, then set it up.
     vim.opt.rtp:append(pax_nvim)

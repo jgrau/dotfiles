@@ -83,6 +83,13 @@
   # macOS updates that would otherwise reset /etc/pam.d/sudo.
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  # Don't generate /etc/sudoers.d/10-nix-darwin-extra-config. nix-darwin can
+  # only create it as a 0444 nix-store symlink, but our compliance checker
+  # ("Reduce sudo timeout to 0") requires sudoers files to be exactly mode
+  # 0440 and flags it as an error. The file only preserves TERMINFO_DIRS for
+  # root/%admin under sudo, which login shells re-export anyway.
+  security.sudo.keepTerminfo = false;
+
   system.defaults.dock.autohide = true;
 
   # Save screenshots to ~/Screenshots instead of the Desktop.

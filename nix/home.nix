@@ -56,7 +56,7 @@ in
     nerd-fonts.meslo-lg
     neovim
     nodejs   # provides npm, used by `pi install` to fetch pi packages
-    inputs.llm-agents.packages.${pkgs.system}.pi  # pi coding agent
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi  # pi coding agent
     ripgrep
     tealdeer
     television

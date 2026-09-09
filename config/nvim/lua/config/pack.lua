@@ -59,6 +59,8 @@ vim.pack.add({
   -- Editor / git / tpope
   { src = gh("AndrewRadev/switch.vim") },
   { src = gh("christoomey/vim-tmux-navigator") },
+  { src = gh("paulbkim-dev/vim-herdr-navigation") },
+  { src = gh("ChmaraX/herdr-nvim") },
   { src = gh("junegunn/goyo.vim") },
   { src = gh("spf13/vim-autoclose") },
   { src = gh("tomtom/tcomment_vim") },

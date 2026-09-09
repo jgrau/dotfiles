@@ -1,0 +1,100 @@
+# Herdr configuration — deployed to ~/.config/herdr/config.toml via home-manager
+# (see nix/home.nix). Reload a running server after edits with:
+#   herdr server reload-config   (or prefix+shift+r inside herdr)
+#
+# Config reference: https://herdr.dev/docs/config-reference/
+# Keyboard guide:   https://herdr.dev/docs/keyboard/
+
+# Skip the first-run onboarding flow (we configure declaratively instead).
+onboarding = false
+
+# ─── Theme ──────────────────────────────────────────────────────────────────
+# Match the catppuccin mocha look used by tmux (catppuccin plugin) and Neovim.
+[theme]
+name = "catppuccin"
+
+# ─── Keybindings ─────────────────────────────────────────────────────────────
+[keys]
+# Match the tmux prefix (Ctrl-f) so prefix+<key> muscle memory carries over.
+# NOTE: with this prefix, copy-mode's ctrl+f is page-forward; use vi j/k/ctrl+d
+# for scrolling instead (see https://herdr.dev/docs/keyboard/).
+prefix = "ctrl+f"
+
+# Seamless Vim/Neovim <-> herdr pane navigation on ctrl+h/j/k/l is handled by
+# the vim-herdr-navigation plugin via [[keys.command]] below — NOT by the
+# built-in focus_pane_* actions, which would unconditionally steal those keys
+# from Neovim. The built-ins stay on the prefix so keyboard-only pane focus
+# still works: prefix+h/j/k/l.
+focus_pane_left  = "prefix+h"
+focus_pane_down  = "prefix+j"
+focus_pane_up    = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# Splits: keep herdr's prefix+v (side-by-side) and add prefix+| to match the
+# tmux `|` bind. prefix+minus (stacked) already matches the tmux `-` bind.
+split_vertical   = ["prefix+v", "prefix+|"]
+split_horizontal = "prefix+minus"
+
+# Jump back to the previously focused pane (mirrors tmux `C-a last-pane`).
+last_pane = "prefix+semicolon"
+
+# tmux-style one-key pane resizing without entering resize mode. resize_mode
+# (prefix+r) still works for repeated adjustments.
+resize_pane_left  = "ctrl+shift+alt+left"
+resize_pane_down  = "ctrl+shift+alt+down"
+resize_pane_up    = "ctrl+shift+alt+up"
+resize_pane_right = "ctrl+shift+alt+right"
+
+# ─── Vim/Neovim-aware navigation (vim-herdr-navigation plugin) ───────────────
+# On each press the plugin checks the focused pane's foreground process:
+#   - Vim/Neovim running -> forwards the chord into the pane (moves its split;
+#     at a split edge Neovim calls back into herdr to cross the pane boundary).
+#   - anything else       -> moves herdr's pane focus in that direction.
+# Requires: `herdr plugin install paulbkim-dev/vim-herdr-navigation` and the
+# matching Neovim editor mapping in config/nvim/lua/config/plugins.lua.
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"
+
+# prefix+shift+v (prefix+v is taken by split_vertical; prefix+shift+r is
+# herdr's built-in reload-config).
+[[keys.command]]
+key = "prefix+shift+v"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+description = "toggle review pane"
+
+# ─── herdr-nvim (ChmaraX/herdr-nvim) ─────────────────────────────────────────
+# Full-height nvim sidebar + agent-output file picker. The nvim half
+# (annotations) is set up in config/nvim/lua/config/plugins.lua.
+[[keys.command]]
+key = "prefix+e"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.toggle"
+description = "nvim sidebar"
+
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "chmarax.herdr-nvim.pick-file"
+description = "open file from agent output"

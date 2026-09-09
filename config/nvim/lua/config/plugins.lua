@@ -87,13 +87,51 @@ vim.g.projectionist_heuristics = vim.tbl_deep_extend("force", vim.g.projectionis
   },
 })
 
--- ─── tmux navigator ─────────────────────────────────────────────────────────
--- Plugin's own default maps are disabled in config/keymaps.lua
--- (vim.g.tmux_navigator_no_mappings = 1). Wire up <C-hjkl> explicitly.
-bind("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { silent = true })
-bind("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { silent = true })
-bind("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { silent = true })
-bind("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { silent = true })
+-- ─── Multiplexer navigation (herdr + tmux) ──────────────────────────────────
+-- Seamless <C-h/j/k/l> between Neovim splits and the surrounding multiplexer's
+-- panes. On each press we try `wincmd` first; at a split edge we hand off to:
+--   * herdr  — when $HERDR_PANE_ID is set (via `herdr pane focus`), or
+--   * tmux   — when $TMUX is set (via TmuxNavigate*, so the tmux workflow is
+--              unchanged), or
+--   * nothing (plain wincmd) outside any multiplexer.
+-- vim-tmux-navigator stays installed to provide the tmux fallback; its default
+-- maps are disabled in config/keymaps.lua (tmux_navigator_no_mappings = 1).
+-- Requires the herdr side: `herdr plugin install paulbkim-dev/vim-herdr-navigation`
+-- plus the ctrl+h/j/k/l bindings in ~/.config/herdr/config.toml.
+do
+  local function nav(wincmd, dir)
+    local prev = vim.api.nvim_get_current_win()
+    vim.cmd("wincmd " .. wincmd)
+    if vim.api.nvim_get_current_win() ~= prev then
+      return -- moved within Neovim
+    end
+    -- At a split edge: cross into the surrounding multiplexer.
+    if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
+      local herdr = vim.env.HERDR_BIN_PATH
+      if herdr == nil or herdr == "" then
+        herdr = "herdr"
+      end
+      -- Target this pane explicitly; --current resolves to the server's global
+      -- focus, which is not necessarily the pane we are in.
+      vim.fn.system({ herdr, "pane", "focus", "--direction", dir, "--pane", vim.env.HERDR_PANE_ID })
+    elseif vim.env.TMUX and vim.env.TMUX ~= "" then
+      local tmux = { left = "Left", down = "Down", up = "Up", right = "Right" }
+      pcall(vim.cmd, "TmuxNavigate" .. tmux[dir])
+    end
+  end
+
+  bind("n", "<C-h>", function() nav("h", "left") end,  { silent = true, desc = "Navigate left (vim/herdr/tmux)" })
+  bind("n", "<C-j>", function() nav("j", "down") end,  { silent = true, desc = "Navigate down (vim/herdr/tmux)" })
+  bind("n", "<C-k>", function() nav("k", "up") end,    { silent = true, desc = "Navigate up (vim/herdr/tmux)" })
+  bind("n", "<C-l>", function() nav("l", "right") end, { silent = true, desc = "Navigate right (vim/herdr/tmux)" })
+end
+
+-- ─── herdr-nvim (agent annotations) ─────────────────────────────────────────
+-- The nvim half of ChmaraX/herdr-nvim: comment code and send it to the agent
+-- in your herdr workspace. The herdr half (sidebar toggle prefix+e, file
+-- picker prefix+o) is configured in config/herdr/config.toml.
+-- Annotation keymaps under <leader>a: ac comment, al list, as send, aS submit.
+require("herdr-nvim").setup({})
 
 -- ─── Copilot ────────────────────────────────────────────────────────────────
 vim.g.copilot_node_command = "/opt/homebrew/bin/node"
@@ -111,7 +149,8 @@ do
 
   bind("n", "<leader>R", "<cmd>TestNearest<cr>", { desc = "Run nearest spec" })
   bind("n", "<leader>r", "<cmd>TestFile<cr>", { desc = "Run spec file" })
-  bind("n", "<leader>a", "<cmd>TestSuite<cr>", { desc = "Run spec suite" })
+  -- <leader>a is owned by herdr-nvim annotations (see below); TestSuite is
+  -- available via :TestSuite.
   bind("n", "<leader>l", "<cmd>TestLast<cr>", { desc = "Run last spec" })
 end
 
@@ -147,6 +186,7 @@ do
     preset = "modern",
     delay = 500,
     spec = {
+      { "<leader>a", group = "annotations" },
       { "<leader>c", group = "config" },
       { "<leader>f", group = "find" },
       { "<leader>g", group = "git" },

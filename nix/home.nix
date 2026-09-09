@@ -40,6 +40,7 @@ in
     _1password-cli
     ack
     act
+    bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
     caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
     difftastic
     direnv

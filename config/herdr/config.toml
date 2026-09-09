@@ -107,3 +107,11 @@ key = "prefix+s"
 type = "plugin_action"
 command = "fullerzz.sesh.open-picker"
 description = "open Sesh workspace picker"
+
+# ─── Command palette (JanTvrdik/herdr-command-palette) ────────────────────
+# fzf popup of every action from every installed plugin. Requires fzf + jq.
+[[keys.command]]
+key = "prefix+p"
+type = "plugin_action"
+command = "jt.command-palette.open"
+description = "command palette"

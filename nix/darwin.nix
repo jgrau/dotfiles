@@ -4,8 +4,8 @@
   # Pin Neovim to the unstable channel for a newer release than 25.11 ships.
   nixpkgs.overlays = [
     (final: prev: {
-      neovim = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.neovim;
-      neovim-unwrapped = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.neovim-unwrapped;
+      neovim = inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.neovim;
+      neovim-unwrapped = inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.neovim-unwrapped;
     })
   ];
 

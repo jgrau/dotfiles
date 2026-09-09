@@ -98,3 +98,12 @@ key = "prefix+o"
 type = "plugin_action"
 command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
+
+# ─── Sesh for Herdr (fullerzz/herdr-plugin-sesh) ────────────────────────────
+# Sesh-style workspace/session picker. The docs' default prefix+shift+t
+# collides with herdr's built-in rename_tab, so use prefix+s instead.
+[[keys.command]]
+key = "prefix+s"
+type = "plugin_action"
+command = "fullerzz.sesh.open-picker"
+description = "open Sesh workspace picker"

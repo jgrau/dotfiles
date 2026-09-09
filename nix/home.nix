@@ -328,7 +328,6 @@ in
       yank
       pain-control
       vim-tmux-navigator
-      resurrect
       {
         plugin = catppuccin;
         extraConfig = ''
@@ -342,13 +341,6 @@ in
         extraConfig = ''
           set -g @fzf-url-bind "u"
           set -g @fzf-url-history-limit "2000"
-        '';
-      }
-      {
-        plugin = continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '15'
         '';
       }
     ];

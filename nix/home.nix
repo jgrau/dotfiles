@@ -375,5 +375,12 @@ in
     "ghostty/pi-app".source = ../config/ghostty/pi-app;
     "ghostty/shaders/cursor_smear.glsl".source = ../config/ghostty/shaders/cursor_smear.glsl;
     "ghostty/pi.icns".source = ../config/ghostty/pi.icns;
+
+    # Herdr config. Link ONLY config.toml (not the whole dir): herdr writes
+    # logs, session state, and `herdr plugin install` clones into ~/.config/herdr/
+    # at runtime, which a read-only Nix store dir-symlink would block.
+    # The vim-herdr-navigation plugin referenced here is installed imperatively:
+    #   herdr plugin install paulbkim-dev/vim-herdr-navigation
+    "herdr/config.toml".source = ../config/herdr/config.toml;
   };
 }

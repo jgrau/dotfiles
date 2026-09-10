@@ -119,3 +119,14 @@ key = "prefix+p"
 type = "plugin_action"
 command = "jt.command-palette.open"
 description = "command palette"
+
+# ─── Plugin manager (speardragon/herdr-plugin-manager) ────────────────────
+# Popup TUI over `herdr plugin` — install/update/remove/toggle + marketplace.
+# The plugin recommends prefix+p, but that's taken by the command palette, so
+# use prefix+shift+p. This overrides herdr's built-in rename_pane; rename a
+# pane via the settings/command palette if needed.
+[[keys.command]]
+key = "prefix+shift+p"
+type = "plugin_action"
+command = "ray.plugin-manager.open"
+description = "open plugin manager"

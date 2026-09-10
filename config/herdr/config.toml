@@ -20,6 +20,10 @@ name = "catppuccin"
 # for scrolling instead (see https://herdr.dev/docs/keyboard/).
 prefix = "ctrl+f"
 
+# Detach from the current session on prefix+d (tmux muscle memory; herdr's
+# default detach is prefix+q). prefix+d is otherwise unbound, so no collision.
+detach = "prefix+d"
+
 # Seamless Vim/Neovim <-> herdr pane navigation on ctrl+h/j/k/l is handled by
 # the vim-herdr-navigation plugin via [[keys.command]] below — NOT by the
 # built-in focus_pane_* actions, which would unconditionally steal those keys

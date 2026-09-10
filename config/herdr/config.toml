@@ -42,6 +42,11 @@ split_horizontal = "prefix+minus"
 # Jump back to the previously focused pane (mirrors tmux `C-a last-pane`).
 last_pane = "prefix+semicolon"
 
+# Open an existing Git worktree checkout (built-in action, unbound by default).
+# Pairs with herdr's built-in new_worktree on prefix+shift+g. prefix+g is
+# otherwise free.
+open_worktree = "prefix+g"
+
 # tmux-style one-key pane resizing without entering resize mode. resize_mode
 # (prefix+r) still works for repeated adjustments.
 resize_pane_left  = "ctrl+shift+alt+left"

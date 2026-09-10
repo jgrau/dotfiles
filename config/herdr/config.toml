@@ -130,3 +130,11 @@ key = "prefix+shift+p"
 type = "plugin_action"
 command = "ray.plugin-manager.open"
 description = "open plugin manager"
+
+# ─── GitHub PR status (wyattjoh/herdr-plugin-gh-pr) ───────────────────────
+# The plugin writes each agent pane's branch PR status to a `pr` metadata
+# token; the sidebar only renders tokens listed in a row, so add $pr to the
+# agent row. Rows below mirror herdr's default agent layout plus $pr. Needs
+# bun + gh (authenticated) on PATH.
+[ui.sidebar.agents]
+rows = [["state_icon", "machine", "workspace", "tab", "$pr"], ["agent"]]

@@ -41,6 +41,7 @@ in
     ack
     act
     bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
+    bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
     caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
     difftastic
     direnv

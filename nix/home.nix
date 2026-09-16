@@ -381,8 +381,18 @@ in
     # Herdr config. Link ONLY config.toml (not the whole dir): herdr writes
     # logs, session state, and `herdr plugin install` clones into ~/.config/herdr/
     # at runtime, which a read-only Nix store dir-symlink would block.
-    # The vim-herdr-navigation plugin referenced here is installed imperatively:
-    #   herdr plugin install paulbkim-dev/vim-herdr-navigation
+    # Herdr plugins are installed imperatively (not declaratively managed).
+    # Re-run these on a fresh machine to restore the plugin set:
+    #   herdr plugin install paulbkim-dev/vim-herdr-navigation  # vim/herdr seamless nav
+    #   herdr plugin install ChmaraX/herdr-nvim                 # nvim sidebar + file picker
+    #   herdr plugin install fullerzz/herdr-plugin-sesh         # sesh workspace picker
+    #   herdr plugin install wyattjoh/herdr-plugin-gh-pr        # GitHub PR status token
+    #   herdr plugin install JanTvrdik/herdr-command-palette    # fzf command palette
+    #   herdr plugin install speardragon/herdr-plugin-manager   # plugin manager TUI
+    #   herdr plugin install persiyanov/herdr-reviewr           # review pane
+    #   herdr plugin install Matovidlo/herdr-pr-tracker         # Claude PR tracker
+    #   herdr plugin install devashish2203/herdr-worktrunk      # worktree management
+    #   herdr plugin install jeph/herdr-pane-balancer           # auto-equalize panes on split/close
     "herdr/config.toml".source = ../config/herdr/config.toml;
   };
 }

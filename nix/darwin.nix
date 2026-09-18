@@ -50,8 +50,12 @@
       cleanup = "zap"; # remove anything not listed below
       upgrade = true;
     };
+    taps = [
+      "nnnkkk7/tap" # source of lazyactions
+    ];
     brews = [
       "herdr"       # agent multiplexer / terminal runtime for coding agents (https://herdr.dev)
+      "nnnkkk7/tap/lazyactions" # lazygit-style TUI for GitHub Actions
       "worktrunk"  # `wt` — Git worktree management for parallel AI agent workflows
       "sox"         # audio recording — required by Raycast "Whisper Dictation" extension
       "whisper-cpp" # local speech-to-text engine — required by Raycast "Whisper Dictation" extension

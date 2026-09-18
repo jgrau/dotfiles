@@ -54,6 +54,22 @@ resize_pane_down  = "ctrl+shift+alt+down"
 resize_pane_up    = "ctrl+shift+alt+up"
 resize_pane_right = "ctrl+shift+alt+right"
 
+# tmux built-in swap-pane keys: prefix+{ swaps with the previous pane,
+# prefix+} with the next. herdr models swaps directionally (left/right), so
+# map { -> left and } -> right via the `herdr pane swap` CLI. This is on top
+# of herdr's built-in directional swap on prefix+shift+h/j/k/l.
+[[keys.command]]
+key = "prefix+{"
+type = "shell"
+command = "herdr pane swap --current --direction left"
+description = "swap pane previous/left (tmux prefix+{)"
+
+[[keys.command]]
+key = "prefix+}"
+type = "shell"
+command = "herdr pane swap --current --direction right"
+description = "swap pane next/right (tmux prefix+})"
+
 # ─── Vim/Neovim-aware navigation (vim-herdr-navigation plugin) ───────────────
 # On each press the plugin checks the focused pane's foreground process:
 #   - Vim/Neovim running -> forwards the chord into the pane (moves its split;
@@ -136,6 +152,17 @@ type = "plugin_action"
 command = "ray.plugin-manager.open"
 description = "open plugin manager"
 
+# ─── Workspace PR status refresh (local workspace-pr plugin) ──────────────
+# Re-poll gh for every workspace's PR status on demand. workspace.focused only
+# refreshes the workspace you switch to, so this covers updating CI/review while
+# idle. prefix+shift+r is herdr's reload-config; use prefix+shift+g… taken by
+# new_worktree. prefix+r is resize_mode; prefix+shift+i is free.
+[[keys.command]]
+key = "prefix+shift+i"
+type = "plugin_action"
+command = "workspace-pr.refresh-all"
+description = "refresh workspace PR status (all)"
+
 # ─── GitHub PR status (wyattjoh/herdr-plugin-gh-pr) ───────────────────────
 # The plugin writes each agent pane's branch PR status to a `pr` metadata
 # token; the sidebar only renders tokens listed in a row, so add $pr to the
@@ -143,3 +170,19 @@ description = "open plugin manager"
 # bun + gh (authenticated) on PATH.
 [ui.sidebar.agents]
 rows = [["state_icon", "machine", "workspace", "tab", "$pr"], ["agent"]]
+
+# ─── Workspace PR status line (local workspace-pr plugin) ─────────────────
+# The local `workspace-pr` plugin writes each workspace's branch PR status to a
+# workspace-scoped `pr` metadata token (state + review + CI, in words), so the
+# sidebar can show a PR line *under the workspace* — unlike wyattjoh/gh-pr,
+# which is pane/agent-scoped. Rows below mirror herdr's default space layout
+# plus a third `$pr` line; the line collapses when a workspace has no PR.
+# Plugin lives at config/herdr/plugins/workspace-pr and is linked with
+#   herdr plugin link <that path>
+# Needs bun + gh (authenticated) on PATH. Refresh: on workspace.focused, on
+# server startup (--all), and via the workspace-pr.refresh-all action below.
+[ui.sidebar.spaces]
+# Blank row between workspace entries so the list is easier to scan (default 0
+# packs them together).
+row_gap = 1
+rows = [["state_icon", "workspace"], ["branch", "git_status"], ["$pr"]]

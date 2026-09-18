@@ -1,0 +1,41 @@
+id = "workspace-pr"
+name = "Workspace PR Status"
+version = "0.1.0"
+min_herdr_version = "0.7.4"
+description = "Adds a PR status line under each workspace in the sidebar (words: state, review, CI)."
+platforms = ["macos", "linux"]
+
+# Commands run directly (no shell), so bun is invoked explicitly rather than
+# relying on the script shebang + execute bit.
+
+# Refresh the focused workspace when the user switches to it. The event payload
+# (HERDR_PLUGIN_EVENT_JSON) carries data.workspace_id; the script falls back to
+# HERDR_WORKSPACE_ID and finally the currently-focused workspace.
+[[events]]
+on = "workspace.focused"
+command = ["bun", "bin/update-workspace-pr.ts"]
+
+# Seed every workspace once when the plugin (server) starts, so lines appear
+# without needing to focus each workspace first.
+[[startup]]
+command = ["bun", "bin/update-workspace-pr.ts", "--all"]
+
+# Clear the token for a closed workspace so no stale metadata lingers.
+[[events]]
+on = "workspace.closed"
+command = ["bun", "bin/update-workspace-pr.ts", "--closed"]
+
+# Manual "refresh every workspace" action. Bind in config.toml via
+# [[keys.command]] type = "plugin_action", command = "workspace-pr.refresh-all".
+[[actions]]
+id = "refresh-all"
+title = "Refresh PR status (all workspaces)"
+contexts = ["workspace", "global"]
+command = ["bun", "bin/update-workspace-pr.ts", "--all"]
+
+# Manual "refresh this workspace" action.
+[[actions]]
+id = "refresh"
+title = "Refresh PR status (this workspace)"
+contexts = ["workspace"]
+command = ["bun", "bin/update-workspace-pr.ts"]

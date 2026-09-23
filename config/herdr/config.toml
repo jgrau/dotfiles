@@ -105,8 +105,8 @@ description = "navigate right (vim/herdr)"
 # herdr's built-in reload-config).
 [[keys.command]]
 key = "prefix+shift+v"
-type = "shell"
-command = '"$HOME/.config/herdr/reviewr-toggle.sh"'
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
 description = "toggle review pane"
 
 # ─── herdr-nvim (ChmaraX/herdr-nvim) ─────────────────────────────────────────

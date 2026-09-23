@@ -394,9 +394,5 @@ in
     #   herdr plugin install devashish2203/herdr-worktrunk      # worktree management
     #   herdr plugin install jeph/herdr-pane-balancer           # auto-equalize panes on split/close
     "herdr/config.toml".source = ../config/herdr/config.toml;
-    "herdr/reviewr-toggle.sh" = {
-      source = ../config/herdr/reviewr-toggle.sh;
-      executable = true;
-    };
   };
 }

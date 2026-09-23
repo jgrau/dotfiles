@@ -129,9 +129,15 @@ description = "open file from agent output"
 # collides with herdr's built-in rename_tab, so use prefix+s instead.
 [[keys.command]]
 key = "prefix+s"
-type = "plugin_action"
-command = "fullerzz.sesh.open-picker"
+type = "shell"
+command = '"$HOME/.config/herdr/sesh-open.sh"'
 description = "open Sesh workspace picker"
+
+[[keys.command]]
+key = "prefix+shift+b"
+type = "plugin_action"
+command = "fullerzz.sesh.last"
+description = "switch to previous Sesh workspace"
 
 # ─── Command palette (JanTvrdik/herdr-command-palette) ────────────────────
 # fzf popup of every action from every installed plugin. Requires fzf + jq.

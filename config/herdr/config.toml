@@ -176,6 +176,10 @@ type = "plugin_action"
 command = "workspace-pr.refresh-all"
 description = "refresh workspace PR status (all)"
 
+# Use distinct static glyphs for agent states instead of colored dots.
+[ui]
+status_indicators = "symbols"
+
 # ─── Workspace PR status line (local workspace-pr plugin) ─────────────────
 # The local `workspace-pr` plugin writes each workspace's branch PR status to a
 # workspace-scoped `pr` metadata token (state + review + CI, in words), so the

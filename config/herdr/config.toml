@@ -20,9 +20,10 @@ name = "catppuccin"
 # for scrolling instead (see https://herdr.dev/docs/keyboard/).
 prefix = "ctrl+f"
 
-# Detach from the current session on prefix+d (tmux muscle memory; herdr's
-# default detach is prefix+q). prefix+d is otherwise unbound, so no collision.
-detach = "prefix+d"
+# Detach from the current session on prefix+d and rename tabs with prefix+,
+# to match tmux muscle memory.
+detach     = "prefix+d"
+rename_tab = "prefix+,"
 
 # Seamless Vim/Neovim <-> herdr pane navigation on ctrl+h/j/k/l is handled by
 # the vim-herdr-navigation plugin via [[keys.command]] below — NOT by the
@@ -125,10 +126,10 @@ command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
 
 # ─── Sesh for Herdr (fullerzz/herdr-plugin-sesh) ────────────────────────────
-# Sesh-style workspace/session picker. The docs' default prefix+shift+t
-# collides with herdr's built-in rename_tab, so use prefix+s instead.
+# Sesh-style workspace/session picker on the plugin's documented binding;
+# rename_tab moved to tmux's prefix+, above.
 [[keys.command]]
-key = "prefix+s"
+key = "prefix+shift+t"
 type = "shell"
 command = '"$HOME/.config/herdr/sesh-open.sh"'
 description = "open Sesh workspace picker"

@@ -135,6 +135,12 @@ command = '"$HOME/.config/herdr/sesh-open.sh"'
 description = "open Sesh workspace picker"
 
 [[keys.command]]
+key = "prefix+s"
+type = "shell"
+command = '"$HOME/.config/herdr/sesh-open.sh"'
+description = "open Sesh workspace picker (short binding)"
+
+[[keys.command]]
 key = "prefix+shift+b"
 type = "plugin_action"
 command = "fullerzz.sesh.last"

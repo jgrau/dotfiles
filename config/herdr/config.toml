@@ -149,13 +149,13 @@ description = "open file from agent output"
 # rename_tab moved to tmux's prefix+, above.
 [[keys.command]]
 key = "prefix+shift+t"
-type = "shell"
+type = "plugin_action"
 command = "fullerzz.sesh.open-picker"
 description = "open Sesh workspace picker"
 
 [[keys.command]]
 key = "prefix+s"
-type = "shell"
+type = "plugin_action"
 command = "fullerzz.sesh.open-picker"
 description = "open Sesh workspace picker (short binding)"
 

@@ -133,13 +133,10 @@ repo:
 
 keybindings:
   prs:
-    - key: X
-      name: Review with Pax
+    - key: C
+      name: Review
       command: >-
-        "$HOME/.config/gh-dash/review-pr-with-pax.sh"
-        "{{.RepoName}}"
-        "{{.RepoPath}}"
-        "{{.PrNumber}}"
+        "tuicr pr {{RepoName}}#{{.PrNumber}}"
 repoPaths:
   landfolk/landfolk: /Users/jgrau/src/landfolk
   landfolk/pax: /Users/jgrau/src/pax

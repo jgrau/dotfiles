@@ -425,10 +425,6 @@ in
       nvimFiles;
   in nvimConfig // {
     "gh-dash/config.yml".source = ../config/gh-dash/config.yml;
-    "gh-dash/review-pr-with-pax.sh" = {
-      source = ../config/gh-dash/review-pr-with-pax.sh;
-      executable = true;
-    };
     "ghostty/pi-app".source = ../config/ghostty/pi-app;
     "ghostty/shaders/cursor_smear.glsl".source = ../config/ghostty/shaders/cursor_smear.glsl;
     "ghostty/pi.icns".source = ../config/ghostty/pi.icns;

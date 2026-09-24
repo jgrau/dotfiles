@@ -50,6 +50,7 @@ in
     fd
     fzf
     gh
+    gh-dash
     gitleaks
     go-task
     graphviz
@@ -64,12 +65,17 @@ in
     television
     tig
     tree
+    inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
     watch
     wget
     zoxide
   ];
 
   programs.home-manager.enable = true;
+
+  # Register gh-dash as a GitHub CLI extension. Its dashboard configuration
+  # is managed below; gh's own mutable config and authentication stay unmanaged.
+  xdg.dataFile."gh/extensions/gh-dash".source = "${pkgs.gh-dash}/bin";
 
   programs.direnv = {
     enable = true;
@@ -241,7 +247,16 @@ in
         };
       }
     ];
-    interactiveShellInit = ''
+    # Home Manager's direnv hook is ordered at 1500. Replace it afterward so
+    # gh-dash review worktrees can start Pax immediately; explicit development
+    # commands may still enter the repository's Nix environment when needed.
+    interactiveShellInit = lib.mkOrder 2000 ''
+      functions -e __direnv_export_eval __direnv_cd_hook
+      set -l current_branch (command git branch --show-current 2>/dev/null)
+      if not string match -q 'review/gh-dash-*' -- "$current_branch"
+        ${pkgs.direnv}/bin/direnv hook fish | source
+      end
+
       if test -d ~/src/pax/bin
         fish_add_path ~/src/pax/bin
       end
@@ -267,6 +282,41 @@ in
       set -g tide_left_prompt_items pwd git newline character
       set -g tide_right_prompt_items status cmd_duration jobs direnv ruby time
     '';
+    functions = {
+      # Compact overview of the latest GitHub Actions deploy run: one header
+      # line (SHA + title + overall status) plus one line per job. Refreshes
+      # in place every 5s until the run completes. Defaults to the `api`
+      # workflow on `main`; override with `apici <workflow> <branch>`.
+      apici = ''
+        set -l workflow $argv[1]; test -z "$workflow"; and set workflow api
+        set -l branch $argv[2]; test -z "$branch"; and set branch main
+        set -l run_id (gh run list --workflow $workflow --branch $branch -L1 \
+          --json databaseId -q '.[0].databaseId')
+        if test -z "$run_id"
+          echo "No runs found for workflow '$workflow' on branch '$branch'" >&2
+          return 1
+        end
+        set -l jq_tmpl '
+          def icon: if .status != "completed" then "\u001b[33m●\u001b[0m"
+            elif .conclusion == "success" then "\u001b[32m✔\u001b[0m"
+            elif .conclusion == "skipped" then "\u001b[90m–\u001b[0m"
+            else "\u001b[31m✘\u001b[0m" end;
+          "\u001b[1m" + (.headSha[0:8]) + "\u001b[0m  " + .displayTitle
+          + "  [" + (.status) + (if (.conclusion // "") != "" then " / " + .conclusion else "" end) + "]",
+          (.jobs[] | "  " + (. | icon) + " " + .name
+            + "  \u001b[90m" + (.status) + (if (.conclusion // "") != "" then "/" + .conclusion else "" end) + "\u001b[0m")'
+        while true
+          set -l snapshot (gh run view $run_id \
+            --json headSha,displayTitle,status,conclusion,jobs -q $jq_tmpl)
+          clear
+          echo "$workflow @ $branch  ·  run $run_id  ·  "(date +%H:%M:%S)
+          printf '%s\n' $snapshot
+          set -l overall (gh run view $run_id --json status -q .status)
+          test "$overall" = completed; and break
+          sleep 5
+        end
+      '';
+    };
     shellAliases = {
       drb = "darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro";
       drs = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro";
@@ -374,6 +424,11 @@ in
       })
       nvimFiles;
   in nvimConfig // {
+    "gh-dash/config.yml".source = ../config/gh-dash/config.yml;
+    "gh-dash/review-pr-with-pax.sh" = {
+      source = ../config/gh-dash/review-pr-with-pax.sh;
+      executable = true;
+    };
     "ghostty/pi-app".source = ../config/ghostty/pi-app;
     "ghostty/shaders/cursor_smear.glsl".source = ../config/ghostty/shaders/cursor_smear.glsl;
     "ghostty/pi.icns".source = ../config/ghostty/pi.icns;

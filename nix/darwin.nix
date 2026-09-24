@@ -1,9 +1,11 @@
 { self, lib, pkgs, inputs, ... }:
 
 {
-  # Pin Neovim to the unstable channel for a newer release than 25.11 ships.
+  # Pin packages that need fixes/features newer than the 25.11 channel.
   nixpkgs.overlays = [
     (final: prev: {
+      # 4.18 panics when its checks sidebar is rendered in a narrow split.
+      gh-dash = inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.gh-dash;
       neovim = inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.neovim;
       neovim-unwrapped = inputs.nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.neovim-unwrapped;
     })

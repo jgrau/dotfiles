@@ -21,6 +21,10 @@
 
     # pi: the pi coding agent. Provides packages.<system>.pi.
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    # tuicr: terminal UI for reviewing code diffs.
+    tuicr.url = "github:agavra/tuicr";
+    tuicr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nix-darwin, home-manager, nix-homebrew, ... }: {

@@ -156,7 +156,7 @@ description = "open Sesh workspace picker"
 [[keys.command]]
 key = "prefix+s"
 type = "shell"
-command = '"$HOME/.config/herdr/sesh-open.sh"'
+command = "fullerzz.sesh.open-picker"
 description = "open Sesh workspace picker (short binding)"
 
 [[keys.command]]

@@ -1,0 +1,32 @@
+[commit]
+	verbose = true
+
+[core]
+	attributesfile = "~/.gitattributes"
+	excludesfile = "~/.gitignore"
+	pager = "hunk pager"
+
+[diff]
+	algorithm = "histogram"
+	external = "difft"
+
+[diff "rspec"]
+	xfuncname = "^[ \\t]*((RSpec|describe|context|it|before|after|around|feature|scenario)[ \\t].*)$"
+
+[merge]
+	conflictStyle = "zdiff3"
+
+[pager]
+	log = "less -FRX"
+
+[pull]
+	rebase = true
+
+[rebase]
+	autoStash = true
+
+[rerere]
+	enabled = true
+
+[include]
+	path = "~/.gitconfig.local"

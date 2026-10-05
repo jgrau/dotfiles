@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+command -v stow >/dev/null || { echo 'stow is missing: apply the Nix configuration first.' >&2; exit 1; }
+case "${1:-check}" in
+  check) action=(--simulate --verbose) ;;
+  apply) action=(--restow --verbose) ;;
+  unlink) action=(--delete --verbose) ;;
+  *) echo "Usage: $0 [check|apply|unlink]" >&2; exit 2 ;;
+esac
+# Load the repo's shared .stowrc even when invoked from another directory.
+# Never --adopt: existing files must not overwrite the versioned source.
+cd -- "$root"
+exec stow "${action[@]}" dotfiles

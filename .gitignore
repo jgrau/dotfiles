@@ -1,5 +1,16 @@
 .DS_Store
 .DS_Store?
+._*
+*~
+*.sw[opx]
+\#*#
+.\#*
+/stow/dotfiles/.config/fish/fish_variables
+/stow/dotfiles/.config/nvim/nvim-pack-lock.json
+/stow/dotfiles/.config/herdr/plugins/
+/stow/dotfiles/.config/herdr/logs/
+/stow/dotfiles/.config/herdr/sessions/
+/stow/dotfiles/.config/herdr/*.log
 result
 *.local
 *.secret

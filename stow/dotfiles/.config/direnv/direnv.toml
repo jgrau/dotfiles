@@ -1,0 +1,5 @@
+hide_env_diff = true
+
+[whitelist]
+exact = ["/Users/jgrau/src/landfolk/.envrc"]
+prefix = ["/Users/jgrau/src/worktrees", "/Users/jgrau/src/landfolk."]

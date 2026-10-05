@@ -19,7 +19,7 @@
     uid = 501;
     gid = 20;
     home = "/Users/jgrau";
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
 
   networking.hostName = "Jonass-MacBook-Pro";       # scutil --set HostName
@@ -29,6 +29,7 @@
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "1password-cli"
+    "zsh-abbr"
   ];
 
   nix.settings = {

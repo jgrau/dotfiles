@@ -1,0 +1,15 @@
+# Keep the default prompt, but hide environment and package information.
+[aws]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[package]
+disabled = true
+
+[python]
+disabled = true

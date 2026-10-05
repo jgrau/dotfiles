@@ -6,8 +6,8 @@
 -- plugin in one add() call, then configure them with plain Lua afterwards.
 --
 -- The lockfile lives at ~/.config/nvim/nvim-pack-lock.json and is owned by
--- vim.pack at runtime (see nix/home.nix, which keeps it out of the read-only
--- Nix store link so it stays writable).
+-- vim.pack at runtime. Stow links individual config files with --no-folding,
+-- leaving the lockfile writable and outside the dotfiles repository.
 
 -- Leader keys must be set before any plugin loads, otherwise plugin mappings
 -- that reference <leader> bind to the wrong key.

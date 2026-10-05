@@ -27,193 +27,7 @@ let
     mkdir -p "$out/Applications"
     unzip -q "$src" -d "$out/Applications"
   '';
-in
-{
-  home.username = "jgrau";
-  home.homeDirectory = "/Users/jgrau";
-
-  # Keep this pinned to the Home Manager release used for the first activation.
-  # Do not bump it just because the flake inputs are updated.
-  home.stateVersion = "25.11";
-
-  home.packages = with pkgs; [
-    _1password-cli
-    ack
-    act
-    bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
-    bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
-    caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
-    difftastic
-    direnv
-    doctl
-    duti  # set default macOS handlers (e.g. Ghostty for shell scripts)
-    fd
-    fzf
-    gh
-    gh-dash
-    gitleaks
-    go-task
-    graphviz
-    imagemagick
-    jq
-    nerd-fonts.meslo-lg
-    neovim
-    nodejs   # provides npm, used by `pi install` to fetch pi packages
-    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi  # pi coding agent
-    ripgrep
-    tealdeer
-    television
-    tig
-    tree
-    inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    watch
-    wget
-    zoxide
-  ];
-
-  programs.home-manager.enable = true;
-
-  # Register gh-dash as a GitHub CLI extension. Its dashboard configuration
-  # is managed below; gh's own mutable config and authentication stay unmanaged.
-  xdg.dataFile."gh/extensions/gh-dash".source = "${pkgs.gh-dash}/bin";
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-    config = {
-      hide_env_diff = true;
-      # Auto-trust .envrc in landfolk worktrees (siblings named landfolk.<branch>)
-      # so newly-created worktrees load without a manual `direnv allow`. The
-      # trailing dot keeps this from also matching landfolk-api-* etc.; the main
-      # repo is whitelisted by its exact .envrc path.
-      whitelist.prefix = [
-        "/Users/jgrau/src/worktrees"
-        "/Users/jgrau/src/landfolk."
-      ];
-      whitelist.exact = [
-        "/Users/jgrau/src/landfolk/.envrc"
-      ];
-    };
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableFishIntegration = true;
-    enableZshIntegration = true;
-  };
-
-  # Make Ghostty the default app for shell-script file types (the closest macOS
-  # equivalent to a "default terminal"). Re-applied on every activation; duti is
-  # idempotent. macOS has no setting for the Finder "Open in Terminal" button —
-  # Apple hardcodes that to Terminal.app — so this covers .sh/.command/etc.
-  home.activation.ghosttyDefaultHandler =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      DUTI="${pkgs.duti}/bin/duti"
-      GHOSTTY_ID="com.mitchellh.ghostty"
-      for uti in \
-        public.shell-script \
-        public.unix-executable \
-        com.apple.terminal.shell-script \
-        public.zsh-script \
-        public.csh-script \
-        public.perl-script; do
-        run "$DUTI" -s "$GHOSTTY_ID" "$uti" all || true
-      done
-      # Note: no `.terminal` — that extension is Terminal.app profile plists,
-      # not a shell script, and has no registered UTI (duti errors with -50).
-      for ext in sh command tool; do
-        run "$DUTI" -s "$GHOSTTY_ID" ".$ext" all || true
-      done
-    '';
-
-  programs.ghostty = {
-    enable = true;
-    package = pkgs.ghostty-bin;
-    enableFishIntegration = true;
-
-    settings = {
-      font-family = "MesloLGS Nerd Font Mono";
-      font-size = 14;
-      macos-titlebar-style = "tabs";
-      window-padding-x = 8;
-      window-padding-y = 8;
-
-      # Animated trailing cursor (smear effect). Reloadable at runtime
-      # (cmd+shift+,). Trail color follows `cursor-color`.
-      custom-shader = "shaders/cursor_smear.glsl";
-
-      # Quick terminal (Quake-style dropdown), centered on screen.
-      keybind = "global:alt+tab=toggle_quick_terminal";
-      quick-terminal-position = "center";
-      # ~60% of the screen so it also fits comfortably on the laptop
-      # display when the external monitor is unplugged.
-      quick-terminal-size = "60%,60%";
-    };
-  };
-
-  # TomatoBar menu bar pomodoro timer (see tomatobarApp in the let block).
-  home.file."Applications/TomatoBar.app" = {
-    source = "${tomatobarApp}/Applications/TomatoBar.app";
-    recursive = true;
-  };
-
-  # The Nix-store copy of TomatoBar can carry the com.apple.quarantine xattr,
-  # and the app is only ad-hoc signed, so Gatekeeper blocks it. Strip the
-  # attribute from the linked bundle on every activation.
-  home.activation.dequarantineTomatoBar =
-    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-      run /usr/bin/xattr -dr com.apple.quarantine \
-        "$HOME/Applications/TomatoBar.app" 2>/dev/null || true
-    '';
-
-
-  imports = [ inputs.hunk.homeManagerModules.default ];
-
-  # hunk: review-first terminal diff viewer. enableGitIntegration sets it as
-  # the git pager (core.pager = "hunk pager"); it does not touch diff.external
-  # (difftastic), so the two coexist.
-  programs.hunk = {
-    enable = true;
-    enableGitIntegration = true;
-    settings = {
-      theme = "auto";
-      mode = "auto";
-      line_numbers = true;
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    includes = [
-      { path = "~/.gitconfig.local"; }
-    ];
-    settings = {
-      user.name = "Jonas Grau";
-      user.email = "jonas.grau@gmail.com";
-      core = {
-        excludesfile = "~/.gitignore";
-        attributesfile = "~/.gitattributes";
-      };
-      pull.rebase = true;
-      # hunk (core.pager) intercepts diff/show output for its TUI, but plain
-      # `git log` produces no diff and hangs in hunk's pager. Route `git log`
-      # through less instead. Note: this also applies to `git log -p`.
-      pager.log = "less -FRX";
-      diff = {
-        external = "difft";
-        algorithm = "histogram";
-      };
-      merge.conflictStyle = "zdiff3";
-      commit.verbose = true;
-      rerere.enabled = true;
-      rebase.autoStash = true;
-      "diff \"rspec\"".xfuncname = "^[ \\t]*((RSpec|describe|context|it|before|after|around|feature|scenario)[ \\t].*)$";
-    };
-  };
-
-  programs.fish = {
-    enable = true;
-    plugins = with pkgs.fishPlugins; [
+  fishPlugins = with pkgs.fishPlugins; [
       { name = "autopair"; src = autopair-fish.src; }
       { name = "done"; src = done.src; }
       { name = "fzf.fish"; src = fzf-fish.src; }
@@ -246,204 +60,116 @@ in
           sha256 = "sha256-rRibn+FN8VNTSC1HmV05DXEa6+3uOHNx03tprkcjjs8=";
         };
       }
-    ];
-    # Home Manager's direnv hook is ordered at 1500. Replace it afterward so
-    # gh-dash review worktrees can start Pax immediately; explicit development
-    # commands may still enter the repository's Nix environment when needed.
-    interactiveShellInit = lib.mkOrder 2000 ''
-      functions -e __direnv_export_eval __direnv_cd_hook
-      set -l current_branch (command git branch --show-current 2>/dev/null)
-      if not string match -q 'review/gh-dash-*' -- "$current_branch"
-        ${pkgs.direnv}/bin/direnv hook fish | source
-      end
+  ];
+  tmuxPlugins = with pkgs.tmuxPlugins; [ sensible yank pain-control vim-tmux-navigator catppuccin fzf-tmux-url ];
+  runtimePackages = with pkgs; { inherit bash-completion zsh zsh-abbr zsh-autopair zsh-autosuggestions zsh-syntax-highlighting nix-direnv; };
+  runtime = pkgs.linkFarm "dotfiles-runtime" (
+    (map (p: { name = "fish-${p.name}"; path = p.src; }) fishPlugins)
+    ++ (map (p: { name = p.pname; path = p; }) tmuxPlugins)
+    ++ (lib.mapAttrsToList (name: path: { inherit name path; }) runtimePackages)
+  );
+in
+{
+  home.username = "jgrau";
+  home.homeDirectory = "/Users/jgrau";
 
-      if test -d ~/src/pax/bin
-        fish_add_path ~/src/pax/bin
-      end
+  # Keep this pinned to the Home Manager release used for the first activation.
+  # Do not bump it just because the flake inputs are updated.
+  home.stateVersion = "25.11";
 
-      set -gx EDITOR nvim
-      set -gx PNPM_HOME "$HOME/Library/pnpm"
-      if not string match -q -- $PNPM_HOME $PATH
-        fish_add_path --prepend $PNPM_HOME
-      end
+  home.packages = with pkgs; [
+    _1password-cli
+    ack
+    act
+    bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
+    bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
+    caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
+    difftastic
+    direnv
+    doctl
+    duti  # set default macOS handlers (e.g. Ghostty for shell scripts)
+    fd
+    fzf
+    gh
+    gh-dash
+    gitleaks
+    go
+    go-task
+    graphviz
+    imagemagick
+    jq
+    nerd-fonts.meslo-lg
+    neovim
+    nodejs   # provides npm, used by `pi install` to fetch pi packages
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.pi  # pi coding agent
+    ripgrep
+    tealdeer
+    television
+    tig
+    tree
+    inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    watch
+    wget
+    zoxide
+    starship
+    stow
+    bashInteractive
+    bash-completion
+    fish
+    git
+    ghostty-bin
+    tmux
+    zsh
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    nix-direnv
+    inputs.hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 
-      if command -q tv
-        tv init fish | source
-      end
+  # Home Manager owns software/assets only. Editable dotfiles live in stow/.
+  programs.home-manager.enable = true;
+  programs.man.enable = false;
+  home.file.".local/share/dotfiles-runtime".source = runtime;
+  xdg.dataFile."gh/extensions/gh-dash".source = "${pkgs.gh-dash}/bin";
 
-      # worktrunk shell integration (lets `wt switch` change the shell's CWD)
-      if command -q wt
-        wt config shell init fish | source
-      end
-
-      # Tide prompt items
-      set -g tide_cmd_duration_threshold 3000
-      set -g tide_cmd_duration_decimals 0
-      set -g tide_left_prompt_items pwd git newline character
-      set -g tide_right_prompt_items status cmd_duration jobs direnv ruby time
+  # Make Ghostty the default app for shell-script file types (the closest macOS
+  # equivalent to a "default terminal"). Re-applied on every activation; duti is
+  # idempotent. macOS has no setting for the Finder "Open in Terminal" button —
+  # Apple hardcodes that to Terminal.app — so this covers .sh/.command/etc.
+  home.activation.ghosttyDefaultHandler =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      DUTI="${pkgs.duti}/bin/duti"
+      GHOSTTY_ID="com.mitchellh.ghostty"
+      for uti in \
+        public.shell-script \
+        public.unix-executable \
+        com.apple.terminal.shell-script \
+        public.zsh-script \
+        public.csh-script \
+        public.perl-script; do
+        run "$DUTI" -s "$GHOSTTY_ID" "$uti" all || true
+      done
+      # Note: no `.terminal` — that extension is Terminal.app profile plists,
+      # not a shell script, and has no registered UTI (duti errors with -50).
+      for ext in sh command tool; do
+        run "$DUTI" -s "$GHOSTTY_ID" ".$ext" all || true
+      done
     '';
-    functions = {
-      # Compact overview of the latest GitHub Actions deploy run: one header
-      # line (SHA + title + overall status) plus one line per job. Refreshes
-      # in place every 5s until the run completes. Defaults to the `api`
-      # workflow on `main`; override with `apici <workflow> <branch>`.
-      apici = ''
-        set -l workflow $argv[1]; test -z "$workflow"; and set workflow api
-        set -l branch $argv[2]; test -z "$branch"; and set branch main
-        set -l run_id (gh run list --workflow $workflow --branch $branch -L1 \
-          --json databaseId -q '.[0].databaseId')
-        if test -z "$run_id"
-          echo "No runs found for workflow '$workflow' on branch '$branch'" >&2
-          return 1
-        end
-        set -l jq_tmpl '
-          def icon: if .status != "completed" then "\u001b[33m●\u001b[0m"
-            elif .conclusion == "success" then "\u001b[32m✔\u001b[0m"
-            elif .conclusion == "skipped" then "\u001b[90m–\u001b[0m"
-            else "\u001b[31m✘\u001b[0m" end;
-          "\u001b[1m" + (.headSha[0:8]) + "\u001b[0m  " + .displayTitle
-          + "  [" + (.status) + (if (.conclusion // "") != "" then " / " + .conclusion else "" end) + "]",
-          (.jobs[] | "  " + (. | icon) + " " + .name
-            + "  \u001b[90m" + (.status) + (if (.conclusion // "") != "" then "/" + .conclusion else "" end) + "\u001b[0m")'
-        while true
-          set -l snapshot (gh run view $run_id \
-            --json headSha,displayTitle,status,conclusion,jobs -q $jq_tmpl)
-          clear
-          echo "$workflow @ $branch  ·  run $run_id  ·  "(date +%H:%M:%S)
-          printf '%s\n' $snapshot
-          set -l overall (gh run view $run_id --json status -q .status)
-          test "$overall" = completed; and break
-          sleep 5
-        end
-      '';
-    };
-    shellAliases = {
-      drb = "darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      drs = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      g = "git";
-      ll = "ls -lah";
-      ppr = "gh pr create";
-      reload = "source ~/.config/fish/config.fish";
-      vim = "nvim";
-      wtc = "wt switch --create";
-      wtl = "wt list";
-      wts = "wt switch";
-      wtsm = "wt switch main";
-    };
+
+  # TomatoBar menu bar pomodoro timer (see tomatobarApp in the let block).
+  home.file."Applications/TomatoBar.app" = {
+    source = "${tomatobarApp}/Applications/TomatoBar.app";
+    recursive = true;
   };
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    shellAliases = {
-      drb = "darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      drs = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      g = "git";
-      ll = "ls -lah";
-    };
-    initContent = ''
-      eval "$(zoxide init zsh)"
+  # The Nix-store copy of TomatoBar can carry the com.apple.quarantine xattr,
+  # and the app is only ad-hoc signed, so Gatekeeper blocks it. Strip the
+  # attribute from the linked bundle on every activation.
+  home.activation.dequarantineTomatoBar =
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      run /usr/bin/xattr -dr com.apple.quarantine \
+        "$HOME/Applications/TomatoBar.app" 2>/dev/null || true
     '';
-  };
 
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    shellAliases = {
-      drb = "darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      drs = "sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro";
-      g = "git";
-      ll = "ls -lah";
-    };
-    initExtra = ''
-      eval "$(zoxide init bash)"
-    '';
-  };
 
-  programs.tmux = {
-    enable = true;
-    prefix = "C-f";
-    keyMode = "vi";
-    mouse = true;
-    baseIndex = 1;
-    escapeTime = 0;
-    focusEvents = true;
-    terminal = "tmux-256color";
-
-    # Plugins are installed and wired up by nix (no TPM needed). Order matters:
-    # catppuccin must load before the status-bar format lines in extraConfig
-    # that reference its @thm_* variables.
-    plugins = with pkgs.tmuxPlugins; [
-      sensible
-      yank
-      pain-control
-      vim-tmux-navigator
-      {
-        plugin = catppuccin;
-        extraConfig = ''
-          set -g @catppuccin_flavor "mocha"
-          set -g @catppuccin_pane_border_style "fg=#{@thm_overlay_0}"
-          set -g @catppuccin_pane_active_border_style "fg=#{@thm_sky},bold"
-        '';
-      }
-      {
-        plugin = fzf-tmux-url;
-        extraConfig = ''
-          set -g @fzf-url-bind "u"
-          set -g @fzf-url-history-limit "2000"
-        '';
-      }
-    ];
-
-    extraConfig = builtins.readFile ../tmux.conf;
-  };
-
-  home.file.".gitattributes".source = ../gitattributes;
-  home.file.".gitignore".source = ../gitignore;
-  home.file.".gemrc".source = ../gemrc;
-  home.file.".tigrc".source = ../tigrc;
-
-  # Deploy the Neovim (vim.pack) config from the repo into ~/.config/nvim.
-  # We link individual files (recursive) rather than the whole dir, and
-  # deliberately EXCLUDE nvim-pack-lock.json: vim.pack needs to write that
-  # file at runtime, but anything linked from the Nix store is read-only.
-  # Leaving it out lets vim.pack own a normal, writable lockfile in
-  # ~/.config/nvim.
-  xdg.configFile = let
-    nvimSrc = ../config/nvim;
-    # All files under config/nvim except the vim.pack lockfile.
-    nvimFiles = lib.filterAttrs
-      (name: _: name != "nvim-pack-lock.json")
-      (builtins.readDir nvimSrc);
-    nvimConfig = lib.mapAttrs'
-      (name: _: lib.nameValuePair "nvim/${name}" {
-        source = nvimSrc + "/${name}";
-        recursive = true;
-      })
-      nvimFiles;
-  in nvimConfig // {
-    "gh-dash/config.yml".source = ../config/gh-dash/config.yml;
-    "ghostty/pi-app".source = ../config/ghostty/pi-app;
-    "ghostty/shaders/cursor_smear.glsl".source = ../config/ghostty/shaders/cursor_smear.glsl;
-    "ghostty/pi.icns".source = ../config/ghostty/pi.icns;
-
-    # Herdr config. Link ONLY config.toml (not the whole dir): herdr writes
-    # logs, session state, and `herdr plugin install` clones into ~/.config/herdr/
-    # at runtime, which a read-only Nix store dir-symlink would block.
-    # Herdr plugins are installed imperatively (not declaratively managed).
-    # Re-run these on a fresh machine to restore the plugin set:
-    #   herdr plugin install paulbkim-dev/vim-herdr-navigation  # vim/herdr seamless nav
-    #   herdr plugin install ChmaraX/herdr-nvim                 # nvim sidebar + file picker
-    #   herdr plugin install fullerzz/herdr-plugin-sesh         # sesh workspace picker
-    #   herdr plugin install wyattjoh/herdr-plugin-gh-pr        # GitHub PR status token
-    #   herdr plugin install JanTvrdik/herdr-command-palette    # fzf command palette
-    #   herdr plugin install speardragon/herdr-plugin-manager   # plugin manager TUI
-    #   herdr plugin install persiyanov/herdr-reviewr           # review pane
-    #   herdr plugin install Matovidlo/herdr-pr-tracker         # Claude PR tracker
-    #   herdr plugin install devashish2203/herdr-worktrunk      # worktree management
-    #   herdr plugin install jeph/herdr-pane-balancer           # auto-equalize panes on split/close
-    "herdr/config.toml".source = ../config/herdr/config.toml;
-  };
 }

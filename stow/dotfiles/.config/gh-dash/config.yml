@@ -6,14 +6,6 @@ prSections:
   - title: Involved
     filters: is:open involves:@me -author:@me
 
-issuesSections:
-  - title: My Issues
-    filters: is:open author:@me
-  - title: Assigned
-    filters: is:open assignee:@me
-  - title: Involved
-    filters: is:open involves:@me -author:@me
-
 notificationsSections:
   - title: All
     filters: ""
@@ -38,7 +30,7 @@ defaults:
   prsLimit: 20
   issuesLimit: 20
   notificationsLimit: 20
-  prApproveComment: LGTM
+  prApproveComment: lgtm
   preview:
     open: true
     width: 0.45
@@ -136,7 +128,8 @@ keybindings:
     - key: C
       name: Review
       command: >-
-        "tuicr pr {{RepoName}}#{{.PrNumber}}"
+        pane_id=$(herdr pane split --current --direction right --cwd "{{.RepoPath}}" --focus | jq -r '.result.pane.pane_id') &&
+        herdr pane run "$pane_id" "tuicr pr {{.RepoName}}#{{.PrNumber}}; herdr pane close '$pane_id'"
 repoPaths:
   landfolk/landfolk: /Users/jgrau/src/landfolk
   landfolk/pax: /Users/jgrau/src/pax

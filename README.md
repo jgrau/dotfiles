@@ -75,6 +75,10 @@ exec /run/current-system/sw/bin/zsh -l
 
 Existing terminal/multiplexer processes may still inherit `SHELL=fish`; a fresh login or application session picks up the account change. Do not stop a multiplexer server containing active work merely to change shells. Test with `bash tests/zsh.sh` after activation (or set `DOTFILES_TEST_RUNTIME` to the built runtime and put the built Starship binary on PATH beforehand).
 
+## Herdr review workflow
+
+Herdr creates new worktrees under `~/src/worktrees`. Ctrl-f then Shift-C opens tuicr in a right-hand split; gh-dash's `C` review action opens the selected PR there using zsh-compatible shell syntax. Ctrl-f then Shift-T opens the local Work Hub overlay when its separately installed Landfolk plugin is available; Ctrl-f then `s` still opens Sesh. The work-specific plugin is not distributed with these dotfiles.
+
 ## Validation and rollback
 
 ```sh

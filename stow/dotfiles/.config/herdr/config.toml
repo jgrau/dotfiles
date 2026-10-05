@@ -8,6 +8,10 @@
 # Skip the first-run onboarding flow (we configure declaratively instead).
 onboarding = false
 
+# Create new worktrees under the shared checkout directory; existing ones stay put.
+[worktrees]
+directory = "~/src/worktrees"
+
 # ─── Theme ──────────────────────────────────────────────────────────────────
 # Match the catppuccin mocha look used by tmux (catppuccin plugin) and Neovim.
 [theme]
@@ -73,6 +77,23 @@ new_pane=$(printf '%s\n' "$tab" | jq -r '.result.root_pane.pane_id')
 "$H" pane run "$new_pane" "exec gh dash"
 '''
 description = "open GitHub dashboard tab"
+
+# Open tuicr in a focused right-hand split rooted at the active pane's cwd.
+# `exec` lets Herdr close the split when tuicr exits.
+[[keys.command]]
+key = "prefix+shift+c"
+type = "shell"
+command = '''
+H=${HERDR_BIN_PATH:-herdr}
+pane=${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}
+[ -n "$pane" ] || exit 1
+info=$("$H" pane get "$pane") || exit 1
+cwd=$(printf '%s\n' "$info" | jq -r '.result.pane.foreground_cwd // .result.pane.cwd // env.HOME')
+split=$("$H" pane split "$pane" --direction right --cwd "$cwd" --focus) || exit 1
+new_pane=$(printf '%s\n' "$split" | jq -r '.result.pane.pane_id')
+"$H" pane run "$new_pane" "exec tuicr"
+'''
+description = "open tuicr in a right-hand split"
 
 # tmux built-in swap-pane keys: prefix+{ swaps with the previous pane,
 # prefix+} with the next. herdr models swaps directionally (left/right), so
@@ -145,13 +166,12 @@ command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
 
 # ─── Sesh for Herdr (fullerzz/herdr-plugin-sesh) ────────────────────────────
-# Sesh-style workspace/session picker on the plugin's documented binding;
-# rename_tab moved to tmux's prefix+, above.
+# Work Hub overlays the current workspace; Sesh stays on prefix+s.
 [[keys.command]]
 key = "prefix+shift+t"
 type = "plugin_action"
-command = "fullerzz.sesh.open-picker"
-description = "open Sesh workspace picker"
+command = "local.landfolk.work-hub"
+description = "open Work Hub overlay"
 
 [[keys.command]]
 key = "prefix+s"

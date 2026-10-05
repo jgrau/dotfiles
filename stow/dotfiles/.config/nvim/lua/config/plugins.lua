@@ -90,7 +90,8 @@ vim.g.projectionist_heuristics = vim.tbl_deep_extend("force", vim.g.projectionis
 -- ─── Multiplexer navigation (herdr + tmux) ──────────────────────────────────
 -- Seamless <C-h/j/k/l> between Neovim splits and the surrounding multiplexer's
 -- panes. On each press we try `wincmd` first; at a split edge we hand off to:
---   * herdr  — when $HERDR_PANE_ID is set (via `herdr pane focus`), or
+--   * herdr  — when $HERDR_PANE_ID is set, or when herdr-nvim's headless
+--              daemon can find its sidebar pane from $HERDR_TAB_ID, or
 --   * tmux   — when $TMUX is set (via TmuxNavigate*, so the tmux workflow is
 --              unchanged), or
 --   * nothing (plain wincmd) outside any multiplexer.
@@ -99,21 +100,52 @@ vim.g.projectionist_heuristics = vim.tbl_deep_extend("force", vim.g.projectionis
 -- Requires the herdr side: `herdr plugin install paulbkim-dev/vim-herdr-navigation`
 -- plus the ctrl+h/j/k/l bindings in ~/.config/herdr/config.toml.
 do
+  local function herdr_pane_id(herdr)
+    if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
+      return vim.env.HERDR_PANE_ID
+    end
+
+    -- herdr-nvim renders its sidebar through a remote UI attached to a
+    -- headless daemon. The UI has HERDR_PANE_ID, but the daemon running this
+    -- Lua code only knows its tab, so resolve the sidebar pane from that tab.
+    if not vim.env.HERDR_TAB_ID or vim.env.HERDR_TAB_ID == "" then
+      return nil
+    end
+
+    local result = vim.system({ herdr, "pane", "list" }, { text = true }):wait()
+    if result.code ~= 0 then
+      return nil
+    end
+
+    local decoded, payload = pcall(vim.json.decode, result.stdout)
+    if not decoded then
+      return nil
+    end
+
+    for _, pane in ipairs(payload.result and payload.result.panes or {}) do
+      if pane.tab_id == vim.env.HERDR_TAB_ID and pane.label == "nvim sidebar" then
+        return pane.pane_id
+      end
+    end
+  end
+
   local function nav(wincmd, dir)
     local prev = vim.api.nvim_get_current_win()
     vim.cmd("wincmd " .. wincmd)
     if vim.api.nvim_get_current_win() ~= prev then
       return -- moved within Neovim
     end
+
     -- At a split edge: cross into the surrounding multiplexer.
-    if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
-      local herdr = vim.env.HERDR_BIN_PATH
-      if herdr == nil or herdr == "" then
-        herdr = "herdr"
-      end
+    local herdr = vim.env.HERDR_BIN_PATH
+    if herdr == nil or herdr == "" then
+      herdr = "herdr"
+    end
+    local pane_id = herdr_pane_id(herdr)
+    if pane_id then
       -- Target this pane explicitly; --current resolves to the server's global
       -- focus, which is not necessarily the pane we are in.
-      vim.fn.system({ herdr, "pane", "focus", "--direction", dir, "--pane", vim.env.HERDR_PANE_ID })
+      vim.fn.system({ herdr, "pane", "focus", "--direction", dir, "--pane", pane_id })
     elseif vim.env.TMUX and vim.env.TMUX ~= "" then
       local tmux = { left = "Left", down = "Down", up = "Up", right = "Right" }
       pcall(vim.cmd, "TmuxNavigate" .. tmux[dir])

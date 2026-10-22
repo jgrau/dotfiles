@@ -82,6 +82,21 @@ exec /run/current-system/sw/bin/zsh -l
 
 Existing terminal/multiplexer processes may still inherit `SHELL=fish`; a fresh login or application session picks up the account change. Do not stop a multiplexer server containing active work merely to change shells. Test with `bash tests/zsh.sh` after activation (or set `DOTFILES_TEST_RUNTIME` to the built runtime and put the built Starship binary on PATH beforehand).
 
+## Local Docker daemon
+
+Nix installs Colima, which provides Docker's Linux daemon without Docker Desktop.
+Start it when needed; no background service starts automatically:
+
+```sh
+colima start --vm-type vz --cpu 4 --memory 8 --disk 60
+docker info
+colima stop
+```
+
+On Apple Silicon, add `--vz-rosetta` for faster `linux/amd64` container builds.
+Colima owns its VM and generated configuration under `~/.colima`; do not put that
+runtime state under Stow. Stopping the VM stops any containers running inside it.
+
 ## Control / Escape keys
 
 Karabiner-Elements is installed through the Nix-managed Homebrew casks. It replaces the macOS Caps Lock-to-Control mapping: **Caps Lock and left Control** send Escape when tapped alone within 250 ms, and act as Control when held or used in a shortcut. Right Control is unchanged.

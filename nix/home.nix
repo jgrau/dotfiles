@@ -84,6 +84,8 @@ in
     bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
     bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
     caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
+    # Stable Lima is EOL; keep Colima's VM dependency on the maintained pin.
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.colima
     difftastic
     direnv
     doctl

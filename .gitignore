@@ -5,12 +5,12 @@
 *.sw[opx]
 \#*#
 .\#*
-/stow/dotfiles/.config/fish/fish_variables
-/stow/dotfiles/.config/nvim/nvim-pack-lock.json
-/stow/dotfiles/.config/herdr/plugins/
-/stow/dotfiles/.config/herdr/logs/
-/stow/dotfiles/.config/herdr/sessions/
-/stow/dotfiles/.config/herdr/*.log
+/config/fish/fish_variables
+/config/nvim/nvim-pack-lock.json
+/config/herdr/plugins/
+/config/herdr/logs/
+/config/herdr/sessions/
+/config/herdr/*.log
 result
 *.local
 *.secret
@@ -19,4 +19,3 @@ result
 !.env.example
 config/zed/
 .pi/
-config/direnv/

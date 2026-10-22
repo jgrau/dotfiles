@@ -13,9 +13,3 @@
 ^.*\.(local|secret)$
 ^\.env$
 ^\.env\.(?!example$).*$
-
-# Runtime state: paths anchored to this package, not all plugin directories.
-^/\.config/fish/fish_variables$
-^/\.config/nvim/nvim-pack-lock\.json$
-^/\.config/herdr/(plugins|logs|sessions)(/.*)?$
-^/\.config/herdr/.*\.log$

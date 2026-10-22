@@ -70,11 +70,23 @@ alias -- drs='sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/sr
 alias -- g=git
 alias -- ll='ls -lah'
 alias vim=nvim
+alias wm=workmux
 alias wtc='wt switch --create'
 alias wtl='wt list'
 alias wts='wt switch'
 alias wtsm='wt switch main'
 alias reload='source ~/.zshrc'
+
+# Match Fish's auto-connect behavior for bare tmux outside a session.
+tmux() {
+  if (( $# > 0 )) || [[ -n $TMUX ]]; then
+    command tmux "$@"
+  elif command tmux has-session 2>/dev/null; then
+    command tmux attach-session
+  else
+    command tmux new-session
+  fi
+}
 
 # Nix supplies plugin assets; Stow owns these settings and abbreviations.
 if [[ -r "$HOME/.local/share/dotfiles-runtime/zsh-abbr/share/zsh/zsh-abbr/zsh-abbr.zsh" ]]; then
@@ -88,6 +100,11 @@ fi
 
 # Use Starship's defaults: deliberately no custom prompt configuration.
 (( $+commands[starship] )) && eval "$(starship init zsh)"
+
+# Edit the command in the configured editor, then return it to the prompt.
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # Syntax highlighting must load after widgets and other shell integrations.
 source "$HOME/.local/share/dotfiles-runtime/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

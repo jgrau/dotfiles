@@ -69,6 +69,7 @@
       "google-chrome"
       "handy"       # local speech-to-text app (https://handy.computer)
       "iina"
+      "karabiner-elements"
       "lens"
       "linear"
       "mimestream"
@@ -118,7 +119,8 @@
 
   system.keyboard = {
     enableKeyMapping = true;
-    remapCapsLockToControl = true;
+    # Karabiner owns Caps Lock's Control/Escape behavior.
+    remapCapsLockToControl = false;
   };
 
   system.configurationRevision = self.rev or self.dirtyRev or null;

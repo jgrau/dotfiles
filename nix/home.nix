@@ -110,6 +110,7 @@ in
     inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
     watch
     wget
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux
     zoxide
     starship
     stow
@@ -126,7 +127,7 @@ in
     inputs.hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
-  # Home Manager owns software/assets only. Editable dotfiles live in stow/.
+  # Home Manager owns software/assets only. Editable dotfiles live in home/ and config/.
   programs.home-manager.enable = true;
   programs.man.enable = false;
   home.file.".local/share/dotfiles-runtime".source = runtime;

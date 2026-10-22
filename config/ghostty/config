@@ -2,7 +2,7 @@ custom-shader = shaders/cursor_smear.glsl
 font-family = MesloLGS Nerd Font Mono
 font-size = 14
 keybind = global:alt+tab=toggle_quick_terminal
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
 quick-terminal-position = center
 quick-terminal-size = 60%,60%
 theme = Catppuccin Mocha

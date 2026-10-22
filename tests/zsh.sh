@@ -11,8 +11,8 @@ export XDG_STATE_HOME="$HOME/.local/state" ABBR_TMPDIR="$target/abbr-tmp"
 export TERM=xterm-256color
 mkdir -p "$HOME/.config/zsh" "$HOME/.local/share" "$HOME/src/pax/bin" "$target/plain"
 ln -s "$runtime" "$HOME/.local/share/dotfiles-runtime"
-cp "$root/stow/dotfiles/.zshrc" "$HOME/.zshrc"
-cp "$root/stow/dotfiles/.config/zsh/git-abbreviations.zsh" "$HOME/.config/zsh/"
+cp "$root/home/.zshrc" "$HOME/.zshrc"
+cp "$root/config/zsh/git-abbreviations.zsh" "$HOME/.config/zsh/"
 cd "$target/plain"
 zsh -ic '
   [[ $EDITOR == nvim && $PNPM_HOME == $HOME/Library/pnpm ]] || exit 1

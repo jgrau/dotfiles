@@ -1,0 +1,21 @@
+# Replace Stow's defaults deliberately: .gitignore is a deployed dotfile.
+^/\.stow-local-ignore$
+
+# macOS metadata, editor backups and temporary files (basename regexes).
+^\.DS_Store.?$
+^\._.*
+^.*~$
+^.*\.sw[opx]$
+^\#.*\#$
+^\.\#.*$
+
+# Local/private settings; example env files remain eligible for deployment.
+^.*\.(local|secret)$
+^\.env$
+^\.env\.(?!example$).*$
+
+# Runtime state: paths anchored to this package, not all plugin directories.
+^/fish/fish_variables$
+^/nvim/nvim-pack-lock\.json$
+^/herdr/(plugins|logs|sessions)(/.*)?$
+^/herdr/.*\.log$

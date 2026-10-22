@@ -1,1 +1,2 @@
-../../stow/dotfiles/.config/tuicr/config.toml
+theme = "catppuccin-mocha"
+q_quits = true

@@ -1,1 +1,1 @@
-../../stow/dotfiles/.config/nvim/init.lua
+require("config.pack")

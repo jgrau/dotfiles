@@ -3,12 +3,29 @@ set -euo pipefail
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 command -v stow >/dev/null || { echo 'stow is missing: apply the Nix configuration first.' >&2; exit 1; }
 case "${1:-check}" in
-  check) action=(--simulate --verbose) ;;
-  apply) action=(--restow --verbose) ;;
-  unlink) action=(--delete --verbose) ;;
+  check|apply) action=(--restow) ;;
+  unlink) action=(--delete) ;;
   *) echo "Usage: $0 [check|apply|unlink]" >&2; exit 2 ;;
 esac
-# Load the repo's shared .stowrc even when invoked from another directory.
+# Load shared .stowrc defaults from any working directory.
 # Never --adopt: existing files must not overwrite the versioned source.
 cd -- "$root"
-exec stow "${action[@]}" dotfiles
+# Stow requires the target to exist, even for simulation. Use an empty
+# temporary target to preview a first install without creating ~/.config.
+config_target="$HOME/.config"
+preview_target=""
+trap 'if [[ -n "$preview_target" ]]; then rmdir -- "$preview_target"; fi' EXIT
+if [[ ! -e "$config_target" && ! -L "$config_target" ]]; then
+  preview_target=$(mktemp -d)
+  config_target="$preview_target"
+fi
+# Preflight BOTH packages before modifying either target.
+stow --dir="$root" --target="$HOME" --simulate --verbose "${action[@]}" home
+stow --dir="$root" --target="$config_target" --simulate --verbose "${action[@]}" config
+[[ ${1:-check} == check ]] && exit 0
+stow --dir="$root" --target="$HOME" --verbose "${action[@]}" home
+if [[ ${1:-check} == unlink && -n "$preview_target" ]]; then
+  exit 0
+fi
+mkdir -p -- "$HOME/.config"
+stow --dir="$root" --target="$HOME/.config" --verbose "${action[@]}" config

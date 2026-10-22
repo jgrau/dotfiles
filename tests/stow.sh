@@ -3,58 +3,65 @@ set -euo pipefail
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 target=$(mktemp -d)
 trap 'rm -rf -- "$target"' EXIT
-# Exercise a copy so clutter fixtures never touch the real config sources.
 mkdir -p "$target/repo/bin" "$target/home" "$target/elsewhere"
 cp "$root/.stowrc" "$root/.gitignore" "$target/repo/"
 cp "$root/bin/dotfiles" "$target/repo/bin/"
-cp -R "$root/stow" "$target/repo/"
+# Exclude local/private state from the fixture copy.
+(cd "$root" && tar --exclude=config/herdr/plugins -cf - home config) | (cd "$target/repo" && tar -xf -)
 root="$target/repo"
 export HOME="$target/home"
-clutter=(
-  .DS_Store .DS_StoreX ._metadata notes~ .notes.swp '#notes#' '.#notes'
-  settings.local settings.secret .env .env.production
-  .config/fish/fish_variables .config/nvim/nvim-pack-lock.json
-  .config/herdr/plugins/example/plugin.lua .config/herdr/logs/test.txt
-  .config/herdr/sessions/test.json .config/herdr/herdr.log
-)
-for file in "${clutter[@]}"; do
-  mkdir -p "$(dirname "$root/stow/dotfiles/$file")"
-  printf 'clutter\n' > "$root/stow/dotfiles/$file"
+common=(.DS_Store .DS_StoreX ._metadata notes~ .notes.swp '#notes#' '.#notes' settings.local settings.secret .env .env.production)
+clutter=()
+for package in home config; do
+  for file in "${common[@]}"; do clutter+=("$package/$file"); done
+  printf 'EXAMPLE=value\n' > "$root/$package/.env.example"
 done
-printf 'EXAMPLE=value\n' > "$root/stow/dotfiles/.env.example"
-# Check matching Git exclusions independently of Stow's regex rules.
+clutter+=(config/fish/fish_variables config/nvim/nvim-pack-lock.json config/herdr/plugins/example/plugin.lua config/herdr/logs/test.txt config/herdr/sessions/test.json config/herdr/herdr.log)
+for file in "${clutter[@]}"; do
+  mkdir -p "$(dirname "$root/$file")"
+  printf 'clutter\n' > "$root/$file"
+done
 git init -q "$root"
-for file in "${clutter[@]}"; do
-  git -C "$root" check-ignore -q -- "stow/dotfiles/$file"
+for file in "${clutter[@]}"; do git -C "$root" check-ignore -q -- "$file"; done
+for file in home/.env.example config/.env.example config/direnv/direnv.toml; do
+  if git -C "$root" check-ignore -q -- "$file"; then
+    echo "$file should not be Git-ignored" >&2; exit 1
+  fi
 done
-if git -C "$root" check-ignore -q -- stow/dotfiles/.env.example; then
-  echo '.env.example should not be Git-ignored' >&2; exit 1
-fi
-# The helper must find the shared defaults from any working directory.
 cd "$target/elsewhere"
 "$root/bin/dotfiles" check
-[[ ! -e "$HOME/.config" ]]
+[[ ! -e "$HOME/.config" && ! -e "$HOME/.zshrc" ]]
 "$root/bin/dotfiles" apply
-[[ -L "$HOME/.gitignore" ]]
-[[ -L "$HOME/.config/herdr/config.toml" ]]
-[[ ! -L "$HOME/.config/herdr" ]]
-[[ ! -e "$HOME/.stow-local-ignore" ]]
-[[ -L "$HOME/.env.example" ]]
+[[ -L "$HOME/.gitignore" && -L "$HOME/.zshrc" ]]
+[[ -L "$HOME/.config/herdr/config.toml" && ! -L "$HOME/.config/herdr" ]]
+[[ ! -e "$HOME/.stow-local-ignore" && ! -e "$HOME/.config/.stow-local-ignore" ]]
+[[ -L "$HOME/.env.example" && -L "$HOME/.config/.env.example" ]]
+[[ "$HOME/.zshrc" -ef "$root/home/.zshrc" ]]
+[[ "$HOME/.config/herdr/config.toml" -ef "$root/config/herdr/config.toml" ]]
 for file in "${clutter[@]}"; do
-  [[ ! -e "$HOME/$file" && ! -L "$HOME/$file" ]]
+  case "$file" in
+    home/*) dest="$HOME/${file#home/}" ;;
+    config/*) dest="$HOME/.config/${file#config/}" ;;
+  esac
+  [[ ! -e "$dest" && ! -L "$dest" ]]
 done
-# Direct invocation uses exactly the same defaults as the helper.
-(cd "$root" && stow --simulate dotfiles)
+(cd "$root" && stow --dir=. --target="$HOME" --simulate --restow home && stow --dir=. --target="$HOME/.config" --simulate --restow config)
 printf 'runtime state\n' > "$HOME/.config/herdr/state.json"
 "$root/bin/dotfiles" apply
 "$root/bin/dotfiles" unlink
-[[ ! -e "$HOME/.config/herdr/config.toml" ]]
+[[ ! -e "$HOME/.config/herdr/config.toml" && ! -e "$HOME/.zshrc" ]]
 [[ -f "$HOME/.config/herdr/state.json" ]]
-printf 'existing config\n' > "$HOME/.bashrc"
-if "$root/bin/dotfiles" apply; then
-  echo 'Expected a conflict for an existing unmanaged file' >&2
-  exit 1
-fi
-[[ $(< "$HOME/.bashrc") == 'existing config' ]]
-[[ ! -e "$HOME/.config/herdr/config.toml" ]]
-echo 'Stow shared-defaults, clutter, dry-run, apply, idempotency, unlink, runtime-state and conflict tests passed.'
+# Either package's conflicts must prevent changes to BOTH targets.
+for conflict in "$HOME/.bashrc" "$HOME/.config/herdr/config.toml"; do
+  printf 'existing config\n' > "$conflict"
+  if "$root/bin/dotfiles" apply; then
+    echo "Expected conflict for $conflict" >&2; exit 1
+  fi
+  [[ $(< "$conflict") == 'existing config' ]]
+  [[ ! -e "$HOME/.zshrc" && ! -e "$HOME/.config/ghostty/config" ]]
+  rm -- "$conflict"
+done
+"$root/bin/dotfiles" apply
+"$root/bin/dotfiles" check
+"$root/bin/dotfiles" unlink
+echo 'Stow targets, exclusions, dry-run, apply, idempotency, unlink, runtime-state and cross-package conflict tests passed.'

@@ -9,8 +9,8 @@ status is-interactive; and begin
     # Abbreviations
 
     # Aliases
-    alias drb 'darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro'
-    alias drs 'sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro'
+    alias drb 'darwin-rebuild build --flake ~/src/dotfiles#$DOTFILES_HOST'
+    alias drs 'sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#$DOTFILES_HOST'
     alias g git
     alias ll 'ls -lah'
     alias ppr 'gh pr create'

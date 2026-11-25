@@ -66,8 +66,8 @@ eval "$(zoxide init zsh)"
 (( $+commands[tv] )) && eval "$(tv init zsh)"
 (( $+commands[wt] )) && eval "$(wt config shell init zsh)"
 
-alias -- drb='darwin-rebuild build --flake ~/src/dotfiles#Jonass-MacBook-Pro'
-alias -- drs='sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro'
+alias -- drb='darwin-rebuild build --flake ~/src/dotfiles#${DOTFILES_HOST:?Activate a host profile first}'
+alias -- drs='sudo /run/current-system/sw/bin/darwin-rebuild switch --flake ~/src/dotfiles#${DOTFILES_HOST:?Activate a host profile first}'
 alias -- g=git
 alias -- ll='ls -lah'
 alias vim=nvim

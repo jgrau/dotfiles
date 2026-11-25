@@ -27,14 +27,15 @@
     tuicr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, home-manager, nix-homebrew, ... }: {
-    darwinConfigurations."Jonass-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+  outputs = inputs@{ self, nix-darwin, home-manager, nix-homebrew, ... }:
+  let
+    mkHost = host: nix-darwin.lib.darwinSystem {
       modules = [
         ./nix/darwin.nix
         nix-homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
-            enable = true;
+            enable = host.manageHomebrew;
             enableRosetta = false;
             user = "jgrau";
           };
@@ -44,11 +45,13 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "hm-backup";
-          home-manager.extraSpecialArgs = { inherit inputs; };
+          home-manager.extraSpecialArgs = { inherit inputs host; };
           home-manager.users.jgrau = import ./nix/home.nix;
         }
       ];
-      specialArgs = { inherit inputs self; };
+      specialArgs = { inherit inputs self host; };
     };
+  in {
+    darwinConfigurations = builtins.mapAttrs (name: host: mkHost (host // { profileName = name; })) (import ./nix/hosts.nix);
   };
 }

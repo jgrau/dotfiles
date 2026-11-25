@@ -1,4 +1,4 @@
-{ self, lib, pkgs, inputs, ... }:
+{ self, lib, pkgs, inputs, host, ... }:
 
 {
   # Pin packages that need fixes/features newer than the 25.11 channel.
@@ -12,6 +12,7 @@
   ];
 
   system.primaryUser = "jgrau";
+  environment.variables.DOTFILES_HOST = host.profileName;
 
   users.knownUsers = [ "jgrau" ];
   users.users.jgrau = {
@@ -22,9 +23,10 @@
     shell = pkgs.zsh;
   };
 
-  networking.hostName = "Jonass-MacBook-Pro";       # scutil --set HostName
-  networking.localHostName = "Jonass-MacBook-Pro";  # scutil --set LocalHostName (Bonjour .local)
-  networking.computerName = "Jonas’s MacBook Pro";   # scutil --set ComputerName (Finder/UI name)
+  networking.hostName = host.hostName;
+  networking.localHostName = host.hostName;
+  networking.computerName = host.computerName;
+  nix.enable = host.manageNix;
 
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -32,7 +34,7 @@
     "zsh-abbr"
   ];
 
-  nix.settings = {
+  nix.settings = lib.mkIf host.manageNix {
     experimental-features = "nix-command flakes";
     trusted-users = [ "@admin" "jgrau" ];
   };
@@ -46,7 +48,7 @@
 
   # Homebrew is managed declaratively via nix-homebrew (see flake.nix).
   # Add brews/casks here as needed.
-  homebrew = {
+  homebrew = lib.mkIf host.manageHomebrew {
     enable = true;
     onActivation = {
       autoUpdate = true;

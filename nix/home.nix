@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, host, ... }:
 
 let
   # Caprine's bundled Electron 41.6.1 crashes on sign-in on macOS 26 (Tahoe)
@@ -77,41 +77,24 @@ in
   # Do not bump it just because the flake inputs are updated.
   home.stateVersion = "25.11";
 
+  # Core shell/editor tools are shared; heavier software is host-selected.
   home.packages = with pkgs; [
-    _1password-cli
-    ack
-    act
     bat  # syntax-highlighting cat; used by herdr-plugin-sesh fzf picker preview
-    bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
-    caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
-    # Stable Lima is EOL; keep Colima's VM dependency on the maintained pin.
-    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.colima
     difftastic
     direnv
-    doctl
-    duti  # set default macOS handlers (e.g. Ghostty for shell scripts)
     fd
     fzf
     gh
     gh-dash
     gitleaks
-    go
-    go-task
-    graphviz
-    imagemagick
     jq
-    nerd-fonts.meslo-lg
     neovim
     nodejs   # provides npm, used by `pi install` to fetch pi packages
     ripgrep
-    tealdeer
     television
     tig
     tree
-    inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    watch
     wget
-    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux
     zoxide
     starship
     stow
@@ -119,12 +102,31 @@ in
     bash-completion
     fish
     git
-    ghostty-bin
     tmux
     zsh
     zsh-autosuggestions
     zsh-syntax-highlighting
     nix-direnv
+  ] ++ lib.optionals host.desktopApps [
+    caprineApp   # Facebook Messenger desktop app (Caprine on Electron 42; see let block)
+    duti  # set default macOS handlers (e.g. Ghostty for shell scripts)
+    nerd-fonts.meslo-lg
+    ghostty-bin
+  ] ++ lib.optionals host.developmentExtras [
+    _1password-cli
+    ack
+    act
+    bun  # required by herdr-plugin-gh-pr hooks (bun bin/*.ts)
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.colima
+    doctl
+    go
+    go-task
+    graphviz
+    imagemagick
+    tealdeer
+    inputs.tuicr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    watch
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.workmux
     inputs.hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
@@ -139,7 +141,7 @@ in
   # idempotent. macOS has no setting for the Finder "Open in Terminal" button —
   # Apple hardcodes that to Terminal.app — so this covers .sh/.command/etc.
   home.activation.ghosttyDefaultHandler =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    lib.mkIf host.desktopApps (lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       DUTI="${pkgs.duti}/bin/duti"
       GHOSTTY_ID="com.mitchellh.ghostty"
       for uti in \
@@ -156,10 +158,10 @@ in
       for ext in sh command tool; do
         run "$DUTI" -s "$GHOSTTY_ID" ".$ext" all || true
       done
-    '';
+    '');
 
   # TomatoBar menu bar pomodoro timer (see tomatobarApp in the let block).
-  home.file."Applications/TomatoBar.app" = {
+  home.file."Applications/TomatoBar.app" = lib.mkIf host.desktopApps {
     source = "${tomatobarApp}/Applications/TomatoBar.app";
     recursive = true;
   };
@@ -168,10 +170,10 @@ in
   # and the app is only ad-hoc signed, so Gatekeeper blocks it. Strip the
   # attribute from the linked bundle on every activation.
   home.activation.dequarantineTomatoBar =
-    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    lib.mkIf host.desktopApps (lib.hm.dag.entryAfter [ "linkGeneration" ] ''
       run /usr/bin/xattr -dr com.apple.quarantine \
         "$HOME/Applications/TomatoBar.app" 2>/dev/null || true
-    '';
+    '');
 
 
 }

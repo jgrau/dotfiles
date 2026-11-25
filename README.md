@@ -10,6 +10,21 @@ Editable dotfiles are managed by **GNU Stow**. Nix-darwin manages macOS and soft
 - `nix/home.nix` installs user software and exposes versioned plugin assets through `~/.local/share/dotfiles-runtime`. Fish/tmux plugin versions still come from Nix; their editable initialization and settings live in Stow.
 - The old rcm/Brewfile layout, compatibility links and superseded configs have been retired. Git history retains the historical versions; do not run rcm over this repository.
 
+## Host profiles
+
+`nix/hosts.nix` selects identity and software independently of shared Stow settings:
+
+| Flake profile | Software | Ownership |
+| --- | --- | --- |
+| `Jonass-MacBook-Pro` | Core CLI, development extras and desktop apps | Nix-darwin manages Nix and Homebrew (including existing cleanup policy) |
+| `jgrau-m1` | Core shell/editor tools and plugin assets only | Determinate owns Nix; existing Homebrew apps/formulae are untouched |
+
+Both share `nix/darwin.nix`, `nix/home.nix`, and editable dotfiles. The old Mac retains its `jgrau-mbp` hostname. Desktop app activation (TomatoBar and Ghostty file associations) runs only on desktop-enabled hosts. Optional tool bindings remain available but require installing their tools separately.
+
+Build with the explicit profile, e.g. `darwin-rebuild build --flake .#jgrau-m1`, and use the same profile for the sudo switch. On a machine without darwin-rebuild, first build `nix build .#darwinConfigurations.jgrau-m1.system`; review and back up existing configuration before bootstrap activation. Do not use the current Mac's profile on the old Mac. Activated systems export `DOTFILES_HOST`, which the Zsh/Fish `drb` and `drs` aliases use.
+
+Before linking dotfiles on an existing machine, inspect conflicts and back them up outside the repo. Preserve Git identity/credentials in local includes. No host profile copies personal data or credentials.
+
 ## First migration from Home Manager
 
 The migration is prepared in the repository, but **must be activated in this order**:

@@ -28,6 +28,13 @@
   networking.computerName = host.computerName;
   nix.enable = host.manageNix;
 
+  # Undocumented pmset workaround: unlike idle sleep settings, this also
+  # suppresses lid-close sleep. false explicitly restores normal sleep;
+  # null leaves the machine's existing policy alone.
+  system.activationScripts.postActivation.text = lib.mkIf (host.disableSleep != null) ''
+    /usr/bin/pmset -a disablesleep ${if host.disableSleep then "1" else "0"}
+  '';
+
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
     "1password-cli"

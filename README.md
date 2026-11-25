@@ -16,12 +16,14 @@ Editable dotfiles are managed by **GNU Stow**. Nix-darwin manages macOS and soft
 
 | Flake profile | Software | Ownership |
 | --- | --- | --- |
-| `Jonass-MacBook-Pro` | Core CLI, development extras and desktop apps | Nix-darwin manages Nix and Homebrew (including existing cleanup policy) |
+| `jgrau-m5` | Core CLI, development extras and desktop apps | Nix-darwin manages Nix and Homebrew (including existing cleanup policy) |
 | `jgrau-m1` | Core shell/editor tools and plugin assets only | Determinate owns Nix; existing Homebrew apps/formulae are untouched |
 
 Both share `nix/darwin.nix`, `nix/home.nix`, and editable dotfiles. The old Mac retains its `jgrau-mbp` hostname. Desktop app activation (TomatoBar and Ghostty file associations) runs only on desktop-enabled hosts. Optional tool bindings remain available but require installing their tools separately.
 
 Build with the explicit profile, e.g. `darwin-rebuild build --flake .#jgrau-m1`, and use the same profile for the sudo switch. On a machine without darwin-rebuild, first build `nix build .#darwinConfigurations.jgrau-m1.system`; review and back up existing configuration before bootstrap activation. Do not use the current Mac's profile on the old Mac. Activated systems export `DOTFILES_HOST`, which the Zsh/Fish `drb` and `drs` aliases use.
+
+`jgrau-m1` sets `disableSleep = true`, applying `pmset -a disablesleep 1` at activation for lid-closed remote use. This undocumented workaround disables sleep even on battery: keep the Mac powered and ventilated, never in a bag. Test remote access after closing the lid. To reverse it, set `disableSleep = false` and switch (or immediately run `sudo pmset -a disablesleep 0`). `null`, used by `jgrau-m5`, leaves the existing sleep policy untouched; it does not undo a previously enabled override.
 
 Before linking dotfiles on an existing machine, inspect conflicts and back them up outside the repo. Preserve Git identity/credentials in local includes. No host profile copies personal data or credentials.
 
@@ -31,8 +33,8 @@ The migration is prepared in the repository, but **must be activated in this ord
 
 ```sh
 cd ~/src/dotfiles
-darwin-rebuild build --flake .#Jonass-MacBook-Pro
-sudo darwin-rebuild switch --flake .#Jonass-MacBook-Pro
+darwin-rebuild build --flake .#jgrau-m5
+sudo darwin-rebuild switch --flake .#jgrau-m5
 ./bin/dotfiles check
 ./bin/dotfiles apply
 ```
@@ -88,7 +90,7 @@ No `ppr`, `apici`, Git helper functions, Puffer, long-command notifications, abb
 After building, activate the shell/packages and link any new files:
 
 ```sh
-sudo darwin-rebuild switch --flake ~/src/dotfiles#Jonass-MacBook-Pro
+sudo darwin-rebuild switch --flake ~/src/dotfiles#jgrau-m5
 cd ~/src/dotfiles
 ./bin/dotfiles check
 ./bin/dotfiles apply
@@ -155,7 +157,7 @@ In gh-dash, `m` uses the default built-in merge action. Restart gh-dash after ed
 
 ```sh
 nix flake check
-darwin-rebuild build --flake .#Jonass-MacBook-Pro
+darwin-rebuild build --flake .#jgrau-m5
 bash tests/stow.sh
 ./bin/dotfiles check
 ```

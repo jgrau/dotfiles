@@ -8,7 +8,8 @@ HELPDIR="$HOME/.local/share/dotfiles-runtime/zsh/share/zsh/$ZSH_VERSION/help"
 export EDITOR=nvim
 export PNPM_HOME="$HOME/Library/pnpm"
 path=("$PNPM_HOME" $path)
-[[ -d "$HOME/src/pax/bin" ]] && path=("$HOME/src/pax/bin" $path)
+# Prefer the Pax checkout over the installed release.
+path=("$HOME/src/pax/bin" "$HOME/.local/bin" $path)
 
 autoload -U compinit && compinit
 source "$HOME/.local/share/dotfiles-runtime/zsh-autosuggestions/share/zsh-autosuggestions/zsh-autosuggestions.zsh"

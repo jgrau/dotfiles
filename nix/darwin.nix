@@ -66,6 +66,7 @@
     casks = [
       "1password"
       "brave-browser"
+      "claude"
       "google-chrome"
       "handy"       # local speech-to-text app (https://handy.computer)
       "iina"

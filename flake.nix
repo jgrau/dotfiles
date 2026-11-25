@@ -19,7 +19,7 @@
     hunk.url = "github:modem-dev/hunk";
     hunk.inputs.nixpkgs.follows = "nixpkgs";
 
-    # pi: the pi coding agent. Provides packages.<system>.pi.
+    # Workmux: agent worktree orchestration.
     llm-agents.url = "github:numtide/llm-agents.nix";
 
     # tuicr: terminal UI for reviewing code diffs.

@@ -2,6 +2,9 @@
 [aws]
 disabled = true
 
+[docker_context]
+disabled = true
+
 [nodejs]
 disabled = true
 

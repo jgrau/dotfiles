@@ -59,12 +59,12 @@ For a new config, use `config/` for paths relative to `~/.config`, or `home/` fo
 
 Zsh is the login shell declared in `nix/darwin.nix`; changing the running account requires a Nix switch. Fish and its existing configuration remain installed as a fallback. Shell settings live in `home/.zshrc`, not Home Manager.
 
-The setup uses **Starship's default prompt**, except the AWS, Node.js, Nix shell, package and Python modules are disabled in `config/starship.toml`. It retains autosuggestions, syntax highlighting, Ghostty, zoxide, shared history and basic completion, and adds:
+The setup uses **Starship's default prompt**, except the AWS, Docker context, Node.js, Nix shell, package and Python modules are disabled in `config/starship.toml`. It retains autosuggestions, syntax highlighting, Ghostty, zoxide, shared history and basic completion, and adds:
 
 - `zsh-abbr` with the 154 static Git abbreviations from the former Fish Git plugin. Definitions in `.config/zsh/git-abbreviations.zsh` are session-only; helper-dependent abbreviations are intentionally omitted. Nix classifies zsh-abbr as unfree, so only that package is added to the existing allowlist.
 - Autopair, loaded after abbreviations so its space widget can expand them.
 - Television on Ctrl-R (history) and Ctrl-T (smart autocomplete), and Worktrunk's directory-changing shell integration.
-- `EDITOR=nvim`, PNPM and Pax executable paths; no Fish `pax` wrapper.
+- `EDITOR=nvim`, PNPM and `~/.local/bin` executable paths. `~/src/pax/bin` comes first so `pax` uses the development checkout rather than the installed release; no Fish `pax` wrapper.
 - `vim`, `wtc`, `wtl`, `wts`, `wtsm`, and zsh-specific `reload`, alongside `drb`, `drs`, `g`, and `ll`.
 - The Fish startup exception that avoids the direnv hook on `review/gh-dash-*` branches. This is a startup/reload check, not continuous branch detection.
 
@@ -81,6 +81,19 @@ exec /run/current-system/sw/bin/zsh -l
 ```
 
 Existing terminal/multiplexer processes may still inherit `SHELL=fish`; a fresh login or application session picks up the account change. Do not stop a multiplexer server containing active work merely to change shells. Test with `bash tests/zsh.sh` after activation (or set `DOTFILES_TEST_RUNTIME` to the built runtime and put the built Starship binary on PATH beforehand).
+
+## Pi
+
+Pi is installed separately with the official installer, not Home Manager, so updates do not require a Nix rebuild. Node.js and npm remain Nix-managed.
+
+```sh
+curl -fsSL https://pi.dev/install.sh | sh
+pi update
+```
+
+The managed installation lives under `~/.pi/agent/install`, with its launcher exposed through `~/.local/bin/pi` (already on the Zsh PATH). Configuration, credentials and sessions remain in `~/.pi/agent/`, outside this repository.
+
+When migrating from the old Nix package, build and switch first to remove it, then run the installer.
 
 ## Local Docker daemon
 
@@ -108,6 +121,14 @@ Stow owns only `.config/karabiner/assets/complex_modifications/control_escape.js
 ## Tmux task popup
 
 Ctrl-f then Ctrl-a opens a Workmux task popup in the active pane's directory. Enter submits the description; Esc or an empty description cancels. Workmux creates a new branch from local `main`, using the global Workmux auto-name configuration (Pax) to generate its name. The binding passes the originating pane explicitly through the popup environment, because popups do not set `TMUX_PANE`. The helper resolves that pane's session and explicitly uses window mode so creation opens a window in that session, not a new session. Creation errors stay visible until a key is pressed. This replaces the previous-pane binding on Ctrl-a.
+
+## Tmux and Rex branch review
+
+Both use the shared `config/review/branch.sh` helper. Rex's `config/rex/init.lua` is Stow-managed; after edits, run `rex config check` and `rex config reload`. Its **Review Branch in tuicr** action is also available in the command palette. Ctrl-f then `v` remains available for a plain right-hand split.
+
+Ctrl-f then `r` opens tuicr in a right-hand split in the active pane's directory. It reviews commits since the merge base with the base branch, plus staged/unstaged edits (`-r <merge-base>..HEAD -w`); with no branch commits it uses `-w` alone. Quitting closes the pane.
+
+Base selection: `branch.<current-branch>.reviewBase` Git config override, GitHub PR target (via `gh`), cached `origin/HEAD`, then `origin/main`, `origin/master`, local `main` or `master`. PR targets prefer the origin remote-tracking ref, falling back to a local branch. No automatic fetch: run `git fetch origin` to refresh refs. Without an accessible PR, stacked/non-default branches need an explicit override, e.g. `git config branch.my-feature.reviewBase parent-branch`.
 
 ## Herdr review workflow
 

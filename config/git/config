@@ -30,3 +30,9 @@
 
 [include]
 	path = "~/.gitconfig.local"
+[credential "https://github.com"]
+	helper = 
+	helper = !/etc/profiles/per-user/jgrau/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/etc/profiles/per-user/jgrau/bin/gh auth git-credential

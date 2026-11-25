@@ -16,6 +16,7 @@ cp "$root/config/zsh/git-abbreviations.zsh" "$HOME/.config/zsh/"
 cd "$target/plain"
 zsh -ic '
   [[ $EDITOR == nvim && $PNPM_HOME == $HOME/Library/pnpm ]] || exit 1
+  [[ $path[1] == "$HOME/src/pax/bin" ]] || exit 1
   [[ ${aliases[vim]} == nvim && ${aliases[wtsm]} == "wt switch main" ]] || exit 1
   [[ -z ${aliases[ppr]-} ]] || exit 1
   (( $+functions[abbr] && $+functions[autopair-init] && $+functions[wt] )) || exit 1
@@ -25,6 +26,7 @@ zsh -ic '
   (( ${precmd_functions[(Ie)_direnv_hook]} )) || exit 1
   [[ $STARSHIP_SHELL == zsh ]] || exit 1
   source ~/.zshrc
+  [[ $path[1] == "$HOME/src/pax/bin" ]] || exit 1
   [[ $(abbr expand gst) == "git status" ]] || exit 1
   [[ $(bindkey "^R") == *tv-shell-history* ]] || exit 1
   [[ $(bindkey "^T") == *tv-smart-autocomplete* ]] || exit 1
